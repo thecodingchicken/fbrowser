@@ -25,6 +25,8 @@ Versions:
         0.2 fixed fatal NameError in ls command by using os.path.realdir('.')
         0.3 adding mkdir
         0.3.1 fixed mkdir--changed from [:7] to [:6]
+        0.4 fixed ls command of showing other directories
+        
         
 """
 
@@ -68,12 +70,20 @@ def run():
             print()
         elif command[0:3] == 'ls ':
             if os.path.exists(command[3:]):
-                os.listdir(command[3:])
+##                print("Dir %s exists"%command[3:])##Testing
+                startdir=os.path.realpath('.')
+                os.chdir(command[3:])
+                for i in os.listdir(os.path.realpath('.')):
+                    print("%s"%i, end='\n')
+                os.chdir(startdir)
+            else:
+                print("Path not found.  ")
         elif command[0:6] =='mkdir ':
             try:
                 os.mkdir(command[6:].strip())
                 print("Created dir: \"%s\""%command[6:].strip())
             except:
                 print("Error: could not create directory")
+        else:print("Command not recognized")
         
 run()
