@@ -33,20 +33,30 @@ def run():
         a.close()
     print("Starting browser")
     command=None
-    start=os.path.realpath('.')
+    infodir=os.path.realpath('.')
     while command!='exit':
-        command=input("%s$ "%start)#os.path.realpath('.'))
+        command=input("%s$ "%os.getcwd())#os.path.realpath('.'))
         if command[0:3] == 'cd ':
             if (os.path.exists(os.path.join('.',command[3:].strip()))):
-                print(1)
-                start = os.path.join('.',command[3:].strip())
-                start = os.path.realpath(start)
-            elif (os.path.exists(command[3:].strip())):
-                print(2)
-                start= os.path.realpath(command[3:].strip())
-            else:
-                print(3)
-                print(command[3:])
+                os.chdir(command[3:])
+        elif command == 'cd':
+            try:
+                file=open(os.path.join(infodir,'hmdir'))
+                hmdir=file.read()
+            except:
+                print("No homedir given.")
+                print("Please give a homedir.")
+                conf='n'
+                hmdir=''
+                while conf.lower()!='y' or len(hmdir.strip())==0:
+                    hmdir=input("Homedir: ")
+                    print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
+                          end='  ')
+                    conf=input("(Y/n)")
+                file = open(os.path.join(infodir,'hmdir'),'w')
+                file.write(hmdir)
+                file.close()
+                os.chdir(hmdir)
         elif command == 'ls' :
             for i in os.listdir(start):
                 print("%s"%i, end='  ')
