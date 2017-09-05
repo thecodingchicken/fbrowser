@@ -15,7 +15,7 @@ commands to use:
     cd         v0.0
     ls         v0.0
     list
-    mkdir
+    mkdir      v0.3
     rm
     rmdir
 Versions:
@@ -23,6 +23,9 @@ Versions:
         0.0 created initial structure
         0.1 fixed cd command by using os.chdir
         0.2 fixed fatal NameError in ls command by using os.path.realdir('.')
+        0.3 adding mkdir
+        0.3.1 fixed mkdir--changed from [:7] to [:6]
+        
 """
 
 def run():
@@ -47,7 +50,7 @@ def run():
                 hmdir=file.read()
             except:
                 print("No homedir given.")
-                print("Please give a homedir.")
+                print("Please give a homir.")
                 conf='n'
                 hmdir=''
                 while conf.lower()!='y' or len(hmdir.strip())==0:
@@ -66,4 +69,11 @@ def run():
         elif command[0:3] == 'ls ':
             if os.path.exists(command[3:]):
                 os.listdir(command[3:])
+        elif command[0:6] =='mkdir ':
+            try:
+                os.mkdir(command[6:].strip())
+                print("Created dir: \"%s\""%command[6:].strip())
+            except:
+                print("Error: could not create directory")
+        
 run()
