@@ -61,7 +61,7 @@ def run():
                 os.chdir(hmdir)
         elif command == 'ls' :
             for i in os.listdir(os.path.realpath('.')):
-                print("%s"%i, end='  ')
+                print("%s"%i, end='\n')
             print()
         elif command[0:3] == 'ls ':
             if os.path.exists(command[3:]):
