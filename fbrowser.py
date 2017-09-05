@@ -10,6 +10,7 @@ will use:
     os.path.isdir
     os.path.isfile
     os.path.join
+    os.chdir
 commands to use:
     cd         v0.0
     ls         v0.0
@@ -20,7 +21,7 @@ commands to use:
 Versions:
     Alpha:
         0.0 created initial structure
-        0.1a working on cd fixes
+        0.1a fixed cd command by using os.chdir
 """
 
 def run():
