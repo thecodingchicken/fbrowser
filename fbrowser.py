@@ -21,7 +21,8 @@ commands to use:
 Versions:
     Alpha:
         0.0 created initial structure
-        0.1a fixed cd command by using os.chdir
+        0.1 fixed cd command by using os.chdir
+        0.2 fixed fatal NameError in ls command by using os.path.realdir('.')
 """
 
 def run():
@@ -59,7 +60,7 @@ def run():
                 file.close()
                 os.chdir(hmdir)
         elif command == 'ls' :
-            for i in os.listdir(start):
+            for i in os.listdir(os.path.realpath('.')):
                 print("%s"%i, end='  ')
             print()
         elif command[0:3] == 'ls ':
