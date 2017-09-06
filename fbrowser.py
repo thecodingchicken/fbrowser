@@ -4,6 +4,7 @@
 import os
 import sys
 import shutil
+import time
 """
 Python text file browser
 will use:
@@ -15,10 +16,10 @@ will use:
 commands to use:
     cd         v0.0
     ls         v0.0
-    list
     mkdir      v0.3
     rm
     rmdir      v0.7
+    info       v0.9
 Versions:
     Alpha:
         0.0 created initial structure
@@ -32,7 +33,7 @@ Versions:
         0.7 added rmdir
         0.8 fixed rmdir with '.' and '..'
         0.8.1 added error detection in rmdir
-        0.8.2
+        0.9 added info command-lists common information on files
         
 """
 
@@ -126,12 +127,25 @@ def run():
                 for i in range(len(dir_listing)):
                     to_print='%s\t'%dir_listing[i]
                     if 'l' in args:
+                        to_print="%s\t"
         elif command[0:6] =='mkdir ':
             try:
                 os.mkdir(command[6:].strip())
                 print("Created dir: \"%s\""%command[6:].strip())
             except:
                 print("Error: could not create directory")
+        elif command[0:5]=='info ':
+            if os.path.exists(command[5:].strip()):
+                info=os.lstat(command[5:].strip())
+##                command=[command[:5]+command[5:].strip()
+                print("Name:            %s"%command[5:].strip())
+                print("st_mode:         %d"%info[0])
+                print("Inode number:    %d"%info[1])
+                print("st_dev:          %d"%info[2])
+                print("Size:            %d bytes"%info[6])
+                print("st_atime:        %s"%time.ctime(info[7]))
+                print("Last modified:   %s"%time.ctime(info[8]))
+                print("Creation:        %s"%time.ctime(info[9]))
         elif command[0:6]=='rmdir ':
             DIR=command[6:].strip()
             try:
