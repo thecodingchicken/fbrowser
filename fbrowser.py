@@ -3,6 +3,7 @@
 
 import os
 import sys
+import shutil
 """
 Python text file browser
 will use:
@@ -17,7 +18,7 @@ commands to use:
     list
     mkdir      v0.3
     rm
-    rmdir
+    rmdir      v0.7
 Versions:
     Alpha:
         0.0 created initial structure
@@ -28,6 +29,10 @@ Versions:
         0.4 fixed ls command of showing other directories
         0.5 fixed ls command error responce of non-existant directory
         0.6 added get_args function to get the arguments for commands
+        0.7 added rmdir
+        0.8 fixed rmdir with '.' and '..'
+        0.8.1 added error detection in rmdir
+        0.8.2
         
 """
 
@@ -114,13 +119,36 @@ def run():
                 print()
             else:
                 print("Path \"%s\" not found.  "%command[3:])
-            
+        elif command[0:4]=='ls2 ':
+            args,string=get_args(command[3:])
+            if os.path.exists(string):
+                dir_listings=os.listdir(string)
+                for i in range(len(dir_listing)):
+                    to_print='%s\t'%dir_listing[i]
+                    if 'l' in args:
         elif command[0:6] =='mkdir ':
             try:
                 os.mkdir(command[6:].strip())
                 print("Created dir: \"%s\""%command[6:].strip())
             except:
                 print("Error: could not create directory")
+        elif command[0:6]=='rmdir ':
+            DIR=command[6:].strip()
+            try:
+                if os.path.exists(DIR):
+                    os.chdir(DIR)
+                    contents=os.listdir('.')
+                    if len(contents)==0:
+                        os.chdir('..')
+    ##                    shutil.rmtree(DIR)
+                        os.rmdir(DIR)
+                        print("Deleted dir: %s"%DIR)
+                    else:
+                        print("Directory is not empty.")
+            except Exception as error:
+                print("Error: %s"%error)
+        elif command.find('exit')!= -1:
+            pass
         else:print("Command not recognized")
         
 run()
