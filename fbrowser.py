@@ -92,12 +92,16 @@ def run():
         command=input("%s$ "%os.getcwd())#os.path.realpath('.'))
         if command[0:3] == 'cd ':
             if (os.path.exists(os.path.join('.',command[3:].strip()))):
-                try:os.chdir(command[3:])
-                except:pass
+                try:
+                    os.chdir(command[3:])
+                except Exception as E:
+                    print("Could not change directory to %s"%command[3:])
+                    print("Error: %s"%E)
         elif command == 'cd':
             try:
                 file=open(os.path.join(infodir,'hmdir'))
                 hmdir=file.read()
+                os.chdir(hmdir)
             except:
                 print("No homedir given.")
                 print("Please give a homir.")
@@ -194,17 +198,21 @@ def run():
             print("Command:\trmtree\nUsage:\trmtree dir_to_rm")
             print("rmtree deletes each file in a directory, ending with the")
             print("directory.")
-        elif command[0:7]=='rmtree ':
+        elif command[0:7] == 'rmtree ':
             DIR=command[7:].strip()
             if os.path.exists(DIR):
                 conf=input("Are you sure(Y/n)").lower()
-                if conf=='y':
+                if conf == 'y':
                     shutil.rmtree(DIR)
-                    print("Deleted directory.")
-                else:print("Did not delete directory.")
-            else:print("Directory does not exist.")
+                    print(  "Deleted directory."  )
+                else:print(  "Did not delete directory."  )
+            else:print(  "Directory does not exist."  )
         elif command.find( 'pwd')==0:
-            print('\n\t%s\n'%os.path.realpath('.'))
+            print(  '\n\t%s\n'%os.path.realpath('.')  )
         else:print("Command not recognized")
         
-run()
+if __name__=='__main__':
+    try:
+        run()
+    except Exception as error:
+        print("Exited by %s"%error)
