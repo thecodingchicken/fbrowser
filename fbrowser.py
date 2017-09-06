@@ -24,6 +24,7 @@ commands to use:
     rmtree     v1.3
     cp         v1.4
     mv         v1.5
+    touch      v1.7
 Versions:
     Alpha:
         0.0 created initial structure
@@ -54,7 +55,7 @@ Versions:
         1.4 Added cp, a command to copy over directorys or files
         1.5 Added mv, a command to move over directorys and files recursively
         1.6 Fixed WinError in rmtree command by catching exceptions.  
-        
+        1.7 Added touch - to copy the linux command of the same name
 """
 
 def get_args(string):
@@ -246,6 +247,12 @@ def run():
                 print("Starting to move over files")
                 shutil.move(from_loc,to_loc)
                 print("Done moving files.")
+        elif command[0:6] == 'touch ':
+            if os.path.exists(command[6:].strip()):
+                os.utime(command[6:].strip(),None)
+            else:
+                a=open(command[6:].strip(),'w')
+                a.close()
         else:print("Command not recognized")
         
 if __name__=='__main__':
