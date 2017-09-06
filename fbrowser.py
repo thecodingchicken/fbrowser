@@ -22,7 +22,8 @@ commands to use:
     info       v0.9
     pwd        v1.1
     rmtree     v1.3
-    cp       v1.4
+    cp         v1.4
+    mv         v1.5
 Versions:
     Alpha:
         0.0 created initial structure
@@ -51,7 +52,8 @@ Versions:
                     changed starting message
         1.3 Added rmtree, a function to delete directorys that contain data.
         1.4 Added cp, a command to copy over directorys or files
-        
+        1.5 Added mv, a command to move over directorys and files recursively
+        1.6 Fixed WinError in rmtree command by catching exceptions.  
         
 """
 
@@ -219,7 +221,10 @@ def run():
             if os.path.exists(DIR):
                 conf=input("Are you sure(Y/n)").lower()
                 if conf == 'y':
-                    shutil.rmtree(DIR)
+                    try:
+                        shutil.rmtree(DIR)
+                    except Exception as error:
+                        print("Could not delete file %s"%error)
                     print(  "Deleted directory."  )
                 else:print(  "Did not delete directory."  )
             else:print(  "Directory does not exist."  )
@@ -230,7 +235,17 @@ def run():
             from_loc = locs[0]
             to_loc= locs[1]
             if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
+                print("Starting to copy files.")
                 shutil.copytree(from_loc,to_loc)
+                print("Done copying files.")
+        elif command[0:3] == 'mv ':
+            locs=get_args2(command[3:])
+            from_loc = locs[0]
+            to_loc= locs[1]
+            if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
+                print("Starting to move over files")
+                shutil.move(from_loc,to_loc)
+                print("Done moving files.")
         else:print("Command not recognized")
         
 if __name__=='__main__':
