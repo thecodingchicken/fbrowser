@@ -26,7 +26,7 @@ Versions:
         0.3 adding mkdir
         0.3.1 fixed mkdir--changed from [:7] to [:6]
         0.4 fixed ls command of showing other directories
-        
+        0.5 fixed ls command error responce of non-existant directory
         
 """
 
