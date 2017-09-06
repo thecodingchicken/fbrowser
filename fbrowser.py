@@ -30,6 +30,30 @@ Versions:
         
 """
 
+def get_args(string):
+    args=[]
+    end=''
+    possible = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a',
+                'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                't', 'u', 'v', 'w', 'x', 'y', 'z']
+    ready=False
+    for i in range(1,len(string)):
+        if string[i]== '-' and string[i-1]== ' ':
+            end+=' '
+            ready=True
+            continue
+        if ready==True:
+            if string[i] in possible:
+                args.append(string[i])
+                
+            else:
+                end+=string[i]
+                ready=False
+            
+    return args,end
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
@@ -45,7 +69,8 @@ def run():
         command=input("%s$ "%os.getcwd())#os.path.realpath('.'))
         if command[0:3] == 'cd ':
             if (os.path.exists(os.path.join('.',command[3:].strip()))):
-                os.chdir(command[3:])
+                try:os.chdir(command[3:])
+                except:pass
         elif command == 'cd':
             try:
                 file=open(os.path.join(infodir,'hmdir'))
@@ -63,21 +88,32 @@ def run():
                 file = open(os.path.join(infodir,'hmdir'),'w')
                 file.write(hmdir)
                 file.close()
-                os.chdir(hmdir)
+                try:os.chdir(hmdir)
+                except:pass
         elif command == 'ls' :
             for i in os.listdir(os.path.realpath('.')):
                 print("%s"%i, end='\n')
             print()
         elif command[0:3] == 'ls ':
+            args,string=get_args(command[3:])
             if os.path.exists(command[3:]):
 ##                print("Dir %s exists"%command[3:])##Testing
                 startdir=os.path.realpath('.')
-                os.chdir(command[3:])
+                try:os.chdir(command[3:])
+                except Exception as E:
+                    print("Error: %s"%E)
+                    continue
                 for i in os.listdir(os.path.realpath('.')):
                     print("%s"%i, end='\n')
+                    
                 os.chdir(startdir)
+            elif command[3:]=='':
+                for i in os.listdir(os.path.realpath('.')):
+                    print("%s"%i, end='\n')
+                print()
             else:
-                print("Path not found.  ")
+                print("Path \"%s\" not found.  "%command[3:])
+            
         elif command[0:6] =='mkdir ':
             try:
                 os.mkdir(command[6:].strip())
