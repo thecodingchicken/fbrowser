@@ -22,6 +22,7 @@ commands to use:
     info       v0.9
     pwd        v1.1
     rmtree     v1.3
+    cp       v1.4
 Versions:
     Alpha:
         0.0 created initial structure
@@ -48,7 +49,8 @@ Versions:
         1.1 Added pwd command.
         1.2 Added rm file-not found ability; added rm help;
                     changed starting message
-        1.3 Added rmtree, a function to delete directorys that contain data.  
+        1.3 Added rmtree, a function to delete directorys that contain data.
+        1.4 Added cp, a command to copy over directorys or files
         
         
 """
@@ -77,6 +79,20 @@ def get_args(string):
                 ready=False
             
     return args,end
+def get_args2(s):
+    if s.find('"')!=-1 or s.find("'")!=-1:
+        pass
+    else:
+        l=s.split()
+        if len(l)==2:
+            return l
+        elif len(l) == 1:
+##            print("array is of length 1; exiting")
+            l.append(None)
+            return l
+        else:
+##            print("l is longer than an array of len(2)")
+            return l[:2]
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
@@ -209,6 +225,12 @@ def run():
             else:print(  "Directory does not exist."  )
         elif command.find( 'pwd')==0:
             print(  '\n\t%s\n'%os.path.realpath('.')  )
+        elif command[0:3] =='cp ':
+            locs=get_args2(command[3:])
+            from_loc = locs[0]
+            to_loc= locs[1]
+            if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
+                shutil.copytree(from_loc,to_loc)
         else:print("Command not recognized")
         
 if __name__=='__main__':
