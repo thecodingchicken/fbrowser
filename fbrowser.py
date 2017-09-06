@@ -44,7 +44,9 @@ Versions:
         1.0.1 Finished rm
         1.0.2 Fixed rm- brought up TypeError when it split the name rather than
                     stripping it
-        1.1 Added pwd command.  
+        1.1 Added pwd command.
+        1.2 Added rm file-not found ability; added rm help;
+                    changed starting message
         
         
 """
@@ -81,7 +83,7 @@ def run():
         a=open('h_file','a')
         a.write('%s\n'%usern)
         a.close()
-    print("Starting browser")
+    print("Starting file browser")
     command=None
     infodir=os.path.realpath('.')
     while command!='exit':
@@ -182,6 +184,10 @@ def run():
                 except PermissionError:
                     print("Error: you cannot delete the file")
                     print("Not enough permissions")
+            else:
+                print("File not found.")
+        elif command[0:2]=='rm':
+            print("command:\trm\nUsage:\t\trm filename")
         elif command.find( 'pwd')==0:
             print('\n\t%s\n'%os.path.realpath('.'))
         else:print("Command not recognized")
