@@ -34,6 +34,16 @@ Versions:
         0.8 fixed rmdir with '.' and '..'
         0.8.1 added error detection in rmdir
         0.9 added info command-lists common information on files
+    Beta:
+       Starting comment:
+          The file browser currently works, and it works well.  You can change
+          directorys and such.  Currently, you can create empty directorys and
+          delete empty directorys.  I will add rm in soon.
+        1.0 Working on rm.
+        1.0.1 Finished rm
+        1.0.2 Fixed rm- brought up TypeError when it split the name rather than
+                    stripping it
+        
         
 """
 
@@ -146,13 +156,13 @@ def run():
                 print("st_atime:        %s"%time.ctime(info[7]))
                 print("Last modified:   %s"%time.ctime(info[8]))
                 print("Creation:        %s"%time.ctime(info[9]))
-        elif command[0:6]=='rmdir ':
+        elif command[0:6] == 'rmdir ':
             DIR=command[6:].strip()
             try:
                 if os.path.exists(DIR):
                     os.chdir(DIR)
                     contents=os.listdir('.')
-                    if len(contents)==0:
+                    if len(contents) == 0:
                         os.chdir('..')
     ##                    shutil.rmtree(DIR)
                         os.rmdir(DIR)
@@ -161,8 +171,15 @@ def run():
                         print("Directory is not empty.")
             except Exception as error:
                 print("Error: %s"%error)
-        elif command.find('exit')!= -1:
+        elif command.find( 'exit' ) != -1:
             pass
+        elif command[0:3] == 'rm ':
+            if os.path.exists(command[3:].strip()):
+                try:
+                    os.unlink(command[3:].strip())
+                except PermissionError:
+                    print("Error: you cannot delete the file")
+                    print("Not enough permissions")
         else:print("Command not recognized")
         
 run()
