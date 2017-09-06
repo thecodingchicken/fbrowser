@@ -25,6 +25,7 @@ commands to use:
     cp         v1.4
     mv         v1.5
     touch      v1.7
+    cdhmdir    v1.7.1
 Versions:
     Alpha:
         0.0 created initial structure
@@ -56,6 +57,7 @@ Versions:
         1.5 Added mv, a command to move over directorys and files recursively
         1.6 Fixed WinError in rmtree command by catching exceptions.  
         1.7 Added touch - to copy the linux command of the same name
+        1.7.1 Added cdhmdir - change your homedir after the fact of making one
 """
 
 def get_args(string):
@@ -253,8 +255,29 @@ def run():
             else:
                 a=open(command[6:].strip(),'w')
                 a.close()
+        elif command=='cdhmdir':
+            print('*'*10,"Change homedir",'*'*10)
+            try:
+                file=open(os.path.join(infodir,'hmdir'))
+                hmdir=file.read()
+            except:
+                print("Homedir does not exist\nRun 'cd' to get one")
+                continue
+            print("Current homedir is \"%s\""%hmdir)
+            conf='n'
+            hmdir=''
+            while conf.lower()!='y' or len(hmdir.strip())==0:
+                hmdir=input("Homedir: ")
+                print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
+                      end='  ')
+                conf=input("(Y/n)")
+            file = open(os.path.join(infodir,'hmdir'),'w')
+            file.write(hmdir)
+            file.close()
+            try:os.chdir(hmdir)
+            except:pass
         else:print("Command not recognized")
-        
+    print("Logging out.")
 if __name__=='__main__':
     try:
         run()
