@@ -20,6 +20,7 @@ commands to use:
     rm
     rmdir      v0.7
     info       v0.9
+    pwd        v1.1
 Versions:
     Alpha:
         0.0 created initial structure
@@ -43,6 +44,7 @@ Versions:
         1.0.1 Finished rm
         1.0.2 Fixed rm- brought up TypeError when it split the name rather than
                     stripping it
+        1.1 Added pwd command.  
         
         
 """
@@ -180,6 +182,8 @@ def run():
                 except PermissionError:
                     print("Error: you cannot delete the file")
                     print("Not enough permissions")
+        elif command.find( 'pwd')==0:
+            print('\n\t%s\n'%os.path.realpath('.'))
         else:print("Command not recognized")
         
 run()
