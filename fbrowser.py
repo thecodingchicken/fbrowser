@@ -17,10 +17,11 @@ commands to use:
     cd         v0.0
     ls         v0.0
     mkdir      v0.3
-    rm
+    rm         v1.0
     rmdir      v0.7
     info       v0.9
     pwd        v1.1
+    rmtree     v1.3
 Versions:
     Alpha:
         0.0 created initial structure
@@ -47,6 +48,7 @@ Versions:
         1.1 Added pwd command.
         1.2 Added rm file-not found ability; added rm help;
                     changed starting message
+        1.3 Added rmtree, a function to delete directorys that contain data.  
         
         
 """
@@ -186,8 +188,21 @@ def run():
                     print("Not enough permissions")
             else:
                 print("File not found.")
-        elif command[0:2]=='rm':
+        elif command=='rm':
             print("command:\trm\nUsage:\t\trm filename")
+        elif command=='rmtree':
+            print("Command:\trmtree\nUsage:\trmtree dir_to_rm")
+            print("rmtree deletes each file in a directory, ending with the")
+            print("directory.")
+        elif command[0:7]=='rmtree ':
+            DIR=command[7:].strip()
+            if os.path.exists(DIR):
+                conf=input("Are you sure(Y/n)").lower()
+                if conf=='y':
+                    shutil.rmtree(DIR)
+                    print("Deleted directory.")
+                else:print("Did not delete directory.")
+            else:print("Directory does not exist.")
         elif command.find( 'pwd')==0:
             print('\n\t%s\n'%os.path.realpath('.'))
         else:print("Command not recognized")
