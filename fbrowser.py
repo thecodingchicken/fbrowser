@@ -67,9 +67,9 @@ Versions:
                         very unfrequently.
         1.9 Expecting a major change soon, with the ability to run files.  I do
                     not know if the files can run in the terminal, but it
-                    should work well.
+                    should work.  
         1.9.1 Working on the command run, to run other programs
-    Gamma
+    Gamma:
         Starting Comment:
             The program works quite well.  Current commands are below:
             cd, ls,mkdir, rm, rmdir, info, pwd, rmtree, cp, mv, touch, cdhmdir
@@ -80,6 +80,9 @@ Versions:
                          os.system() opens it in a subshell, while
                          os.startfile() is like you double-click it.  
         2.2 Modified info to tell if path is a dir, a file, a link, or a drive
+        2.2.1 Changed cd so that it will only try to change into a directory.
+                         It will tell you if it is not a directory, and if it
+                         does not exist
         
 """
 
@@ -99,11 +102,16 @@ def run():
         command=input("%s$ "%os.getcwd())#os.path.realpath('.'))
         if command[0:3] == 'cd ':
             if (os.path.exists(os.path.join('.',command[3:].strip()))):
-                try:
-                    os.chdir(command[3:])
-                except Exception as E:
-                    print("Could not change directory to %s"%command[3:])
-                    print("Error: %s"%E)
+                if os.path.isdir(os.path.join('.',command[3:].strip())):
+                    try:
+                        os.chdir(command[3:])
+                    except Exception as E:
+                        print("Could not change directory to %s"%command[3:])
+                        print("Error: %s"%E)
+                else:
+                    print("Path exists, but is not a directory.")
+            else:
+                print("Path does not exist.")
         elif command == 'cd':
             try:
                 file=open(os.path.join(infodir,'hmdir'))
@@ -284,7 +292,8 @@ def run():
                 print("%s is a directory.")
             else:
                 print("Sorry, but that doesn't seem to be a file")
-        else:print("Command not recognized")
+        else:
+            print("Command not recognized")
     print("Logging out.")
 if __name__=='__main__':
     try:
