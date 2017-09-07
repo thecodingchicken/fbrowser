@@ -79,7 +79,7 @@ Versions:
         2.1 Changed run command to use os.startfile instead of os.system.
                          os.system() opens it in a subshell, while
                          os.startfile() is like you double-click it.  
-        
+        2.2 Modified info to tell if path is a dir, a file, a link, or a drive
         
 """
 
@@ -166,6 +166,14 @@ def run():
                 info=os.lstat(command[5:].strip())
 ##                command=[command[:5]+command[5:].strip()
                 print("Name:            %s"%command[5:].strip())
+                if os.path.isfile(command[5:].strip()):
+                    print("Type:            file")
+                elif os.path.isdir(command[5:].strip()):
+                    print("Type:            dir")
+                elif os.path.islink(command[5:].strip()):
+                    print("Type:            link")
+                elif os.path.ismount(command[5:].strip()):
+                    print("Type:            Mounted drive")
                 print("st_mode:         %d"%info[0])
                 print("Inode number:    %d"%info[1])
                 print("st_dev:          %d"%info[2])
