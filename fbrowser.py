@@ -73,6 +73,8 @@ Versions:
         Starting Comment:
             The program works quite well.  Current commands are below:
             cd, ls,mkdir, rm, rmdir, info, pwd, rmtree, cp, mv, touch, cdhmdir
+            I have decided to go along with the greek alphabet.  If anyone
+            thinks otherwise, please say below(in the commits)
         2.0 Finished run command, working on testing it
         2.1 Changed run command to use os.startfile instead of os.system.
                          os.system() opens it in a subshell, while
