@@ -27,6 +27,7 @@ commands to use:
     mv         v1.5
     touch      v1.7
     cdhmdir    v1.7.1
+    run        v2.0
 Versions:
     Alpha:
         0.0 created initial structure
@@ -63,7 +64,20 @@ Versions:
         1.7.3 Added some additional statements in 'cp' and 'mv'
         1.8 Created get_args.py, and moved get_arg* functions over.
         1.8.1 From now on, changes in other files will be mentioned 
-                        very unfrequently.  
+                        very unfrequently.
+        1.9 Expecting a major change soon, with the ability to run files.  I do
+                    not know if the files can run in the terminal, but it
+                    should work well.
+        1.9.1 Working on the command run, to run other programs
+    Gamma
+        Starting Comment:
+            The program works quite well.  Current commands are below:
+            cd, ls,mkdir, rm, rmdir, info, pwd, rmtree, cp, mv, touch, cdhmdir
+        2.0 Finished run command, working on testing it
+        2.1 Changed run command to use os.startfile instead of os.system.
+                         os.system() opens it in a subshell, while
+                         os.startfile() is like you double-click it.  
+        
         
 """
 
@@ -250,6 +264,16 @@ def run():
             file.close()
             try:os.chdir(hmdir)
             except:pass
+        elif command[0:4] == 'run ':
+            run=command[4:].strip()
+            print("Running command: %s"%run)
+            if os.path.isfile(run):
+                print("Running file.")
+                os.startfile(run)
+            elif os.path.isdir(run):
+                print("%s is a directory.")
+            else:
+                print("Sorry, but that doesn't seem to be a file")
         else:print("Command not recognized")
     print("Logging out.")
 if __name__=='__main__':
