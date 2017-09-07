@@ -58,6 +58,8 @@ Versions:
         1.6 Fixed WinError in rmtree command by catching exceptions.  
         1.7 Added touch - to copy the linux command of the same name
         1.7.1 Added cdhmdir - change your homedir after the fact of making one
+        1.7.2 Changed get_args2 to return more than 2 arguments
+        1.7.3 Added some additional statements in 'cp' and 'mv'
 """
 
 def get_args(string):
@@ -90,14 +92,14 @@ def get_args2(s):
     else:
         l=s.split()
         if len(l)==2:
-            return l
+            return l,2
         elif len(l) == 1:
 ##            print("array is of length 1; exiting")
             l.append(None)
-            return l
+            return l,2
         else:
 ##            print("l is longer than an array of len(2)")
-            return l[:2]
+            return l,len(l)
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
@@ -234,21 +236,25 @@ def run():
         elif command.find( 'pwd')==0:
             print(  '\n\t%s\n'%os.path.realpath('.')  )
         elif command[0:3] =='cp ':
-            locs=get_args2(command[3:])
+            locs,nums=get_args2(command[3:])
             from_loc = locs[0]
             to_loc= locs[1]
             if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
                 print("Starting to copy files.")
                 shutil.copytree(from_loc,to_loc)
                 print("Done copying files.")
+            else:
+                print("Source doesn't exist or the destination exists.")
         elif command[0:3] == 'mv ':
-            locs=get_args2(command[3:])
+            locs,nums=get_args2(command[3:])
             from_loc = locs[0]
             to_loc= locs[1]
             if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
                 print("Starting to move over files")
                 shutil.move(from_loc,to_loc)
                 print("Done moving files.")
+            else:
+                print("Source doesn't exist or the destination exists.")
         elif command[0:6] == 'touch ':
             if os.path.exists(command[6:].strip()):
                 os.utime(command[6:].strip(),None)
