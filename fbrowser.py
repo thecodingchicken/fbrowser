@@ -136,6 +136,10 @@ def run():
             for i in os.listdir(os.path.realpath('.')):
                 print("%s"%i, end='\n')
             print()
+        elif command == 'ls -h' or command =='ls --help':
+            print('*'*10,' ls ','*'*10)
+            print("\nUse ls to LiSt thhe contents of a directory.")
+            print()
         elif command[0:3] == 'ls ':
             args,string=get_args(command[3:])
             if os.path.exists(command[3:]):
