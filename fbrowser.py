@@ -1,11 +1,5 @@
 #!/bin/bash python3
 #fbrowser.py
-
-import os
-import sys
-import shutil
-import time
-from get_args import get_args,get_args2
 """
 Python text file browser
 will use:
@@ -85,9 +79,17 @@ Versions:
                          does not exist
         
 """
-
-
+import os
+import sys
+import shutil
+import time
+from get_args import get_args,get_args2
+def run():pass
+##__all__=[os,run]
 def run():
+    """run()
+    run takes no input.
+    It is the file browser.  Behold it all in one file.  """
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
     usern=input("Username(for history to be sent to Joshua): ")
@@ -173,6 +175,13 @@ def run():
                 print("Created dir: \"%s\""%command[6:].strip())
             except:
                 print("Error: could not create directory")
+        elif command=='mkdir':
+            print("********** mkdir **********")
+            print("\nUse mkdir to create new directories.")
+            print("Example: 'mkdir test'")
+        elif command=='info':
+            print("********** info **********")
+            print("\nUse info to view statistics on files")
         elif command[0:5]=='info ':
             if os.path.exists(command[5:].strip()):
                 info=os.lstat(command[5:].strip())
