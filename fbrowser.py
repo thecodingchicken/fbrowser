@@ -61,7 +61,10 @@ Versions:
         1.7.1 Added cdhmdir - change your homedir after the fact of making one
         1.7.2 Changed get_args2 to return more than 2 arguments
         1.7.3 Added some additional statements in 'cp' and 'mv'
-        1.8 Created get_args.py, and moved get_arg* functions over.  
+        1.8 Created get_args.py, and moved get_arg* functions over.
+        1.8.1 From now on, changes in other files will be mentioned 
+                        very unfrequently.  
+        
 """
 
 
