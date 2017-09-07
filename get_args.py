@@ -17,7 +17,7 @@ def get_args(string):
     it will parse the string for a dash that is after a space( ' -')
     all args are returned in args.
     everything else is in end, which is a type str
-    that returns ['a','l','t'], "ls exampledir""""
+    that returns ['a','l','t'], "ls exampledir" """
     args=[]
     end=''
     possible = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
