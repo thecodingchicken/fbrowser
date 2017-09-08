@@ -76,7 +76,9 @@ Versions:
         2.2 Modified info to tell if path is a dir, a file, a link, or a drive
         2.2.1 Changed cd so that it will only try to change into a directory.
                          It will tell you if it is not a directory, and if it
-                         does not exist
+                         does not exist, it will complain and exit.
+        2.2.2 Changed hmdir so that it is stored in the program directory.  
+        2.2.3 Info is messed up so I fixed it
         
 """
 import os
@@ -84,12 +86,13 @@ import sys
 import shutil
 import time
 from get_args import get_args,get_args2
+program_path=os.path.dirname(sys.argv[0])
 def run():pass
 ##__all__=[os,run]
 def run():
     """run()
     run takes no input.
-    It is the file browser.  Behold it all in one file.  """
+    It is the file browser.  Behold it all in one function.  """
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
     usern=input("Username(for history to be sent to Joshua): ")
@@ -99,7 +102,6 @@ def run():
         a.close()
     print("Starting file browser")
     command=None
-    infodir=os.path.realpath('.')
     while command!='exit':
         command=input("%s$ "%os.getcwd())#os.path.realpath('.'))
         if command[0:3] == 'cd ':
@@ -116,7 +118,7 @@ def run():
                 print("Path does not exist.")
         elif command == 'cd':
             try:
-                file=open(os.path.join(infodir,'hmdir'))
+                file=open(os.path.join(program_path,'hmdir'))
                 hmdir=file.read()
                 os.chdir(hmdir)
             except:
@@ -129,7 +131,7 @@ def run():
                     print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
                           end='  ')
                     conf=input("(Y/n)")
-                file = open(os.path.join(infodir,'hmdir'),'w')
+                file = open(os.path.join(program_path,'hmdir'),'w')
                 file.write(hmdir)
                 file.close()
                 try:os.chdir(hmdir)
@@ -202,6 +204,8 @@ def run():
                 print("st_atime:        %s"%time.ctime(info[7]))
                 print("Last modified:   %s"%time.ctime(info[8]))
                 print("Creation:        %s"%time.ctime(info[9]))
+            else:
+                print("Path not found.")
         elif command[0:6] == 'rmdir ':
             DIR=command[6:].strip()
             try:
@@ -277,7 +281,7 @@ def run():
         elif command=='cdhmdir':
             print('*'*10,"Change homedir",'*'*10)
             try:
-                file=open(os.path.join(infodir,'hmdir'))
+                file=open(os.path.join(program_path,'hmdir'))
                 hmdir=file.read()
             except:
                 print("Homedir does not exist\nRun 'cd' to get one")
@@ -290,7 +294,7 @@ def run():
                 print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
                       end='  ')
                 conf=input("(Y/n)")
-            file = open(os.path.join(infodir,'hmdir'),'w')
+            file = open(os.path.join(program_path,'hmdir'),'w')
             file.write(hmdir)
             file.close()
             try:os.chdir(hmdir)
@@ -310,6 +314,8 @@ def run():
     print("Logging out.")
 if __name__=='__main__':
     try:
+        print(sys.argv)
         run()
     except Exception as error:
         print("Exited by %s"%error)
+        print(sys.argv)
