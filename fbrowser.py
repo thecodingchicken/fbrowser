@@ -80,7 +80,8 @@ Versions:
                          does not exist, it will complain and exit.
         2.2.2 Changed hmdir so that it is stored in the program directory.  
         2.2.3 Info is messed up so I fixed it.
-        2.2.4 Started working on cat.  
+        2.2.4 Started working on cat.
+        2.2.5 Cat in it's early stages.  
         
 """
 import os
@@ -311,6 +312,12 @@ def run():
                 print("%s is a directory.")
             else:
                 print("Sorry, but that doesn't seem to be a file")
+        elif command[0:4] == 'cat ':
+            file=command[4:].strip()
+            if os.path.exists(file):
+                f=open(file,'r')
+                for line in f.readlines():
+                    print('%s'%line)
         else:
             print("Command not recognized")
     print("Logging out.")
