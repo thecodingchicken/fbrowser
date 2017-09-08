@@ -81,14 +81,10 @@ Versions:
         2.2.2 Changed hmdir so that it is stored in the program directory.  
         2.2.3 Info is messed up so I fixed it.
         2.2.4 Started working on cat.
-<<<<<<< HEAD
         2.2.5 Cat in it's early stages.
         2.3 Cat works and is functional.
         2.3.1 Cat will now be able to list several files.
         2.3.2 Cat can list several files.  
-=======
-        2.2.5 Cat in it's early stages.  
->>>>>>> 86b0b68df75f6e539e153f06139b5feb0d403ac7
         
 """
 import os
@@ -320,7 +316,6 @@ def run():
             else:
                 print("Sorry, but that doesn't seem to be a file")
         elif command[0:4] == 'cat ':
-<<<<<<< HEAD
             files=command[4:].strip()
             for file in files.split():
                 if os.path.exists(file):
@@ -330,13 +325,6 @@ def run():
                         print('%s'%line)
                     print("\n")
                 print('\n\n\n')
-=======
-            file=command[4:].strip()
-            if os.path.exists(file):
-                f=open(file,'r')
-                for line in f.readlines():
-                    print('%s'%line)
->>>>>>> 86b0b68df75f6e539e153f06139b5feb0d403ac7
         else:
             print("Command not recognized")
     print("Logging out.")
