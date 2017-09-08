@@ -22,7 +22,7 @@ commands to use:
     touch      v1.7
     cdhmdir    v1.7.1
     run        v2.0
-    cat        v
+    cat        v2.3
 Versions:
     Alpha:
         0.0 created initial structure
@@ -80,7 +80,11 @@ Versions:
                          does not exist, it will complain and exit.
         2.2.2 Changed hmdir so that it is stored in the program directory.  
         2.2.3 Info is messed up so I fixed it.
-        2.2.4 Started working on cat.  
+        2.2.4 Started working on cat.
+        2.2.5 Cat in it's early stages.
+        2.3 Cat works and is functional.
+        2.3.1 Cat will now be able to list several files.
+        2.3.2 Cat can list several files.  
         
 """
 import os
@@ -311,6 +315,16 @@ def run():
                 print("%s is a directory.")
             else:
                 print("Sorry, but that doesn't seem to be a file")
+        elif command[0:4] == 'cat ':
+            files=command[4:].strip()
+            for file in files.split():
+                if os.path.exists(file):
+                    f=open(file,'r')
+                    print("\n")
+                    for line in f.readlines():
+                        print('%s'%line)
+                    print("\n")
+                print('\n\n\n')
         else:
             print("Command not recognized")
     print("Logging out.")
