@@ -90,7 +90,8 @@ Versions:
                         The file is "~/.hmdir"
                         It has the dot so that it is 'hidden in linux'
                         It also has the windows hidden file attribute.
-        2.4.1 deleting hmdir file, it is no longer needed.  
+        2.4.1 deleting hmdir file in local directory, it is no longer needed.
+        2.4.2 Going to change run command to be able to give the programs args.
         
 """
 import os
@@ -100,7 +101,6 @@ import time
 import ctypes
 from get_args import get_args,get_args2
 program_path=os.path.dirname(sys.argv[0])
-def run():pass
 ##__all__=[os,run]
 def run():
 ##    if sys.argv[0]=='fbrowser.py' and os.path.exists('blocker.pyc'):
@@ -108,7 +108,7 @@ def run():
 ##        raise Exception("Do not run this directly.")
     """run()
     run takes no input.
-    It is the file browser.  Behold it all in one function.  """
+    It is the file browser.  """
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
     usern=input("Username(for history to be sent to Joshua): ")
@@ -269,6 +269,10 @@ def run():
                     print(  "Deleted directory."  )
                 else:print(  "Did not delete directory."  )
             else:print(  "Directory does not exist."  )
+        elif command == 'pwd -h' or command == 'pwd --help':
+            print('*'*10,' pwd ','*'*10)
+            print("use pwd to Print the current Working Directory.")
+            print("Usage: 'pwd'")
         elif command.find( 'pwd')==0:
             print(  '\n\t%s\n'%os.path.realpath('.')  )
         elif command[0:3] =='cp ':
@@ -303,7 +307,7 @@ def run():
                 file=open(os.path.join(program_path,'hmdir'))
                 hmdir=file.read()
             except:
-                print("Homedir does not exist\nRun 'cd' to get one")
+                print("Homedir does not exist\nRun 'cd' to get one.")
                 continue
             print("Current homedir is \"%s\""%hmdir)
             conf='n'
