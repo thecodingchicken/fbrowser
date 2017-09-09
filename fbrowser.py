@@ -89,9 +89,8 @@ Versions:
                         Homedir or '~'
                         The file is "~/.hmdir"
                         It has the dot so that it is 'hidden in linux'
-                        It also has the windows hidden file attribute.  
-        
-        
+                        It also has the windows hidden file attribute.
+        2.4.1 deleting hmdir file, it is no longer needed.  
         
 """
 import os
@@ -104,8 +103,9 @@ program_path=os.path.dirname(sys.argv[0])
 def run():pass
 ##__all__=[os,run]
 def run():
-    if sys.argv[0]=='fbrowser.py' and os.path.exists('blocker.pyc'):
-        print("Please do not run this file directly.")
+##    if sys.argv[0]=='fbrowser.py' and os.path.exists('blocker.pyc'):
+##        print("Please do not run this file directly.")
+##        raise Exception("Do not run this directly.")
     """run()
     run takes no input.
     It is the file browser.  Behold it all in one function.  """
