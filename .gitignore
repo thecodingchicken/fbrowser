@@ -1,4 +1,4 @@
+*.exe
+*.pyc
 h_file
 t
-*.pyc
-*.exe
