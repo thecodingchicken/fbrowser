@@ -84,18 +84,28 @@ Versions:
         2.2.5 Cat in it's early stages.
         2.3 Cat works and is functional.
         2.3.1 Cat will now be able to list several files.
-        2.3.2 Cat can list several files.  
+        2.3.2 Cat can list several files.
+        2.4 Fixed 'cd' and 'cdhmdir' so that the file is stored in your
+                        Homedir or '~'
+                        The file is "~/.hmdir"
+                        It has the dot so that it is 'hidden in linux'
+                        It also has the windows hidden file attribute.  
+        
+        
         
 """
 import os
 import sys
 import shutil
 import time
+import ctypes
 from get_args import get_args,get_args2
 program_path=os.path.dirname(sys.argv[0])
 def run():pass
 ##__all__=[os,run]
 def run():
+    if sys.argv[0]=='fbrowser.py' and os.path.exists('blocker.pyc'):
+        print("Please do not run this file directly.")
     """run()
     run takes no input.
     It is the file browser.  Behold it all in one function.  """
@@ -123,10 +133,12 @@ def run():
             else:
                 print("Path does not exist.")
         elif command == 'cd':
+            path=os.path.expanduser(os.path.join('~','.hmdir'))
             try:
-                file=open(os.path.join(program_path,'hmdir'))
+                file=open(path,'r')
                 hmdir=file.read()
                 os.chdir(hmdir)
+                file.close()
             except:
                 print("No homedir given.")
                 print("Please give a homir.")
@@ -137,7 +149,8 @@ def run():
                     print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
                           end='  ')
                     conf=input("(Y/n)")
-                file = open(os.path.join(program_path,'hmdir'),'w')
+                file = open(path,'w')
+                foo=ctypes.windll.kernel32.SetFileAttributesW(path, 2)
                 file.write(hmdir)
                 file.close()
                 try:os.chdir(hmdir)
