@@ -124,4 +124,5 @@ def get_args2(s):
         else:
 ##            print("l is longer than an array of len(2)")
             return l,len(l)
-print(get_args2('h"C:\\User stuff"1'))
+if __name__=='__main__':
+    print(get_args2('h"C:\\User stuff"1'))

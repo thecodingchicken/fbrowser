@@ -92,7 +92,7 @@ Versions:
                         It also has the windows hidden file attribute.
         2.4.1 deleting hmdir file in local directory, it is no longer needed.
         2.4.2 Going to change run command to be able to give the programs args.
-        
+        2.4.3 the run command is now multi-os.  
 """
 import os
 import sys
@@ -327,7 +327,15 @@ def run():
             print("Running command: %s"%run)
             if os.path.isfile(run):
                 print("Running file.")
-                os.startfile(run)
+                if os.sys.platform=='linux':
+                    os.system(run)
+                elif os.sys.platform in ['win32','win64']:
+                    try:
+                        os.startfile(run)
+                    except Exception as error:
+                        
+                else:
+                    print("Do not know filesystem type.")
             elif os.path.isdir(run):
                 print("%s is a directory.")
             else:
@@ -351,4 +359,4 @@ if __name__=='__main__':
         run()
     except Exception as error:
         print("Exited by %s"%error)
-        print(sys.argv)
+##        print(sys.argv)
