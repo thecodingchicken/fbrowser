@@ -113,7 +113,8 @@ def run():
     print("\nA convient file browser made by Joshua")
     usern=input("Username(for history to be sent to Joshua): ")
     if len(usern)>0:
-        a=open('h_file','a')
+        h_file=os.path.expanduser(os.path.join('~','h_file'))
+        a=open(h_file,'a')
         a.write('%s\n'%usern)
         a.close()
     print("Starting file browser")
@@ -333,7 +334,7 @@ def run():
                     try:
                         os.startfile(run)
                     except Exception as error:
-                        
+                        print("Could not run file: %s"%error)
                 else:
                     print("Do not know filesystem type.")
             elif os.path.isdir(run):
