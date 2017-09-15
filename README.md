@@ -3,7 +3,7 @@
 Python Text File Browser
 
 A python text file browser.  
-Currently works only with windows.
+Currently works best with windows.  It has some compatibility with linux, so please report all bugs below.
 It has been developed in python 3.5.2.  Testing is limited, and is only done for new features.  And by testing, I mean trying it out.  ;-)
 
 I tried it out in python 2.7.3, and it doesn't work.  Sorry to make you sad, python2 people.  
