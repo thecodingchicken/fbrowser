@@ -159,12 +159,13 @@ def run():
                 print("Path does not exist.")
         elif command == 'cd':##The user wants to change to the home directory
             path=os.path.expanduser(os.path.join('~','.hmdir'))
+            print(path)
             #path is to a file that contains the homedir.  The homedir does
             #not have to match real life, but it is better to have it that
             #way.
             try:
                 file=open(path,'r')##Open the file, read only
-                hmdir=file.readlines[0]##Read the first line.
+                hmdir=file.read()##Read the first line.
                 os.chdir(hmdir)#cd to that location
                 file.close()##close the file, you might have problems later
                 #if the file is still open.
