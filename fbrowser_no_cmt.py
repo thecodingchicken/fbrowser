@@ -6,9 +6,6 @@ from get_args import get_args,get_args2
 h_dir=os.path.expanduser('~') 
 prmtusrnme=False
 def run():
-    """run()
-    run takes no input.
-    It is the file browser.  """
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
     usern=''
@@ -258,6 +255,8 @@ def run():
                         print('%s'%line)
                     print("\n")
                 print('\n\n\n')
+        elif command[0:3]=='dir':
+            print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
         else:
             print("Command not recognized")
     print("Logging out.")

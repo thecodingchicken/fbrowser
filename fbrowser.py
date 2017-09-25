@@ -97,7 +97,8 @@ Versions:
         2.4.4 changed cp command to be able to copy over files
         2.5 Commented the whole thing for a friend and anyone else who wants
                          to read it and understand.  The file grew from 15.1 KB
-                         to now 23.6 KB.  
+                         to now 23.6 KB.
+        2.5.1 Added dir command- it justs prints a message
         
 """
 import os    #os module is needed for changing directory, creating files, ...
@@ -439,6 +440,8 @@ def run():
                         print('%s'%line)#print each line
                     print("\n")#have another newline
                 print('\n\n\n')
+        elif command[0:3]=='dir':
+            print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
         else:
             print("Command not recognized")
     print("Logging out.")
