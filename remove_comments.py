@@ -3,8 +3,26 @@
 This file removes comments from a file.
 It's only point is to make the file smaller.  It will save it in
 FILENAME_no_cmt.FILENAMEEXT"""
+def single_lines(l):
+    for i in range(len(l)):
+        if l[i].count('#')>=1:
+            l[i]=l[i][:l[i].find('#')]
+            l[i]+='\n'
+            if l[i].strip()=='':l[i]=''
+    return l[:]
+def multi_lines(l):
+    l2=[]
+    in_cmt=False
+    for i in range(len(l)):
+        if l[i].count('"'+'""')==True:
+            in_cmt=not in_cmt
+            continue
+        if in_cmt==False:
+            l2.append(l[i])
+    return l2
 import os
 file='fbrowser.py'
+file='remove_comments.py'
 f,ext=os.path.splitext(file)
 try:
     a=open(file)#a is a referance to file
@@ -30,13 +48,8 @@ except Exception as E:
     print("Exception found:\n\t\t%s"%E)
     sys.exit(1)
 print("Loaded file")
-
-for i in range(len(lines)):
-    if lines[i].count('#')>=1:
-        lines[i]=lines[i][:lines[i].find('#')]
-        lines[i]+='\n'
-        if lines[i].strip()=='':lines[i]=''
-
+lines=single_lines(lines[:])[:]
+lines=multi_lines(lines[:])[:]
 new_file='%s_no_cmt%s'%(f,ext)
 if True:# not os.path.exists(new_file):
     print("Creating file")

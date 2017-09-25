@@ -113,9 +113,11 @@ h_dir=os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 prmtusrnme=False#For PRoMpTing of the USeR NaME
 def run():
-    """run()
+    """
+run()
     run takes no input.
-    It is the file browser.  """
+    It is the file browser.
+    """
     print("Python Text File Browser.")#intro
     print("\nA convient file browser made by Joshua")#intro
     usern=''
