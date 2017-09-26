@@ -112,6 +112,7 @@ from get_args import get_args,get_args2#get_args is the companion file.
 h_dir=os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 prmtusrnme=False#For PRoMpTing of the USeR NaME
+import remove_comments
 def run():
     """
 run()
@@ -449,8 +450,8 @@ run()
     print("Logging out.")
 if __name__=='__main__':
     try:
-        print(os.sys.argv)
-        run()
+        ##print(os.sys.argv)##Testing
+        run()##Run the program
     except Exception as error:
         print("Exited by %s"%error)
 ##        print(sys.argv)

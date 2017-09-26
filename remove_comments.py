@@ -22,7 +22,7 @@ def multi_lines(l):
     return l2
 import os
 file='fbrowser.py'
-file='remove_comments.py'
+##file='remove_comments.py'
 f,ext=os.path.splitext(file)
 try:
     a=open(file)#a is a referance to file
