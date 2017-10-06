@@ -29,7 +29,7 @@ try:
 except:
     print("The source file \"%s\" doesn't exist"%file)
     os.sys.exit(1)
-
+print("**********DECOMMENTING PROGRAM**********")
 print("Loading lines from file...")
 print("This may take a long time.  Press ^C to exit if you don't want to.")
 try:

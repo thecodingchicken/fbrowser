@@ -99,6 +99,9 @@ Versions:
                          to read it and understand.  The file grew from 15.1 KB
                          to now 23.6 KB.
         2.5.1 Added dir command- it justs prints a message
+        2.5.2 Added remove_comments-it will strip all single-line comments and
+                         multi-line comments.  This makes the file shorter
+        2.5.3 RFC tarfiles  -- I will make this able to read tarfiles.  
         
 """
 import os    #os module is needed for changing directory, creating files, ...
@@ -113,6 +116,7 @@ h_dir=os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 prmtusrnme=False#For PRoMpTing of the USeR NaME
 import remove_comments
+##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
 def run():
     """
 run()
@@ -452,6 +456,7 @@ if __name__=='__main__':
     try:
         ##print(os.sys.argv)##Testing
         run()##Run the program
+        1+2
     except Exception as error:
         print("Exited by %s"%error)
 ##        print(sys.argv)

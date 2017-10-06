@@ -6,6 +6,7 @@ from get_args import get_args,get_args2
 h_dir=os.path.expanduser('~') 
 prmtusrnme=False
 import remove_comments
+b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
@@ -263,6 +264,6 @@ def run():
     print("Logging out.")
 if __name__=='__main__':
     try:
-        run()
+        1+2
     except Exception as error:
         print("Exited by %s"%error)
