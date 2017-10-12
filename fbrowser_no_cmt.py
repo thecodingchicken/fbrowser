@@ -6,7 +6,8 @@ from get_args import get_args,get_args2
 h_dir=os.path.expanduser('~') 
 prmtusrnme=False
 import remove_comments
-b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
+from other_functions import string_contains
+import tarfile
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
@@ -91,6 +92,60 @@ def run():
             except Exception as error:
                 print("Error: could not create directory")
                 print(error)
+        elif command[0:4]=='tar ':
+            if os.path.exists(command[4:].strip()):
+                print("Tar file exists.  \nDepending on the size of the file,",
+                      end='')
+                print(" it may take a long time")
+                file_n=command[4:].strip()
+                print("Loaded tar file.  Starting tarbrowser.\n")
+                text=''
+                while True:
+                    try:
+                        text=input('%s >'%os.path.basename(file_n))
+                    except:
+                        print("To quit, type 'exit'")
+                        continue
+                    if text=='exit':
+                        print("Exiting") 
+                        break
+                    elif text[:4]=='add ':
+                        if os.path.exists(text[4:].strip()):
+                            file=tarfile.TarFile(file_n,'a')
+                            print("Opened tar archive.")
+                            if os.path.isfile(text[4:].strip()):
+                                print("Adding file to archive")
+                                file.add(os.path.basename(text[4:].strip()))
+                                os.unlink(os.path.basename(text[4:].strip()))
+                            file.add(text[4:].strip())
+                            print("Wrote file/folder")
+                            file.close()
+                        else:
+                            print("File doesn't exist")
+                    elif text=='view':
+                        file=tarfile.TarFile(file_n)
+                        c=file.next();
+                        counter=0
+                        while c!=None:
+                            print(c)
+                            c=file.next()
+                            counter+=1;
+                            if counter==9:
+                                counter=0
+                                try:foo=input('Press enter to continue')
+                                except:
+                                    print("Exiting.")
+                                    break
+                        file.close()
+                file.close()
+                del file
+            else:
+                print("Tar file not found.")
+                print("Other tar files are:")
+                files=os.listdir('.')
+                for i in range(len(files)):
+                    if string_contains(files[i],'.tar'):
+                        print(files[i])
         elif command=='mkdir':
             print("********** mkdir **********")
             print("\nUse mkdir to create new directories.")
@@ -264,6 +319,7 @@ def run():
     print("Logging out.")
 if __name__=='__main__':
     try:
+        run()
         1+2
     except Exception as error:
         print("Exited by %s"%error)
