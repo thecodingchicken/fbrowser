@@ -119,7 +119,9 @@ h_dir=os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 prmtusrnme=False#For PRoMpTing of the USeR NaME
 import remove_comments
+remove_comments.remove_cmts('fbrowser.py')
 from other_functions import string_contains
+import zipbrowser#
 import tarfile#tarfile is used for the tarbrowser sub-shell
 ##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
 def run():

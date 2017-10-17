@@ -1,26 +1,10 @@
-"""
-Name:
-    zipbrowser.py
-Point:
-    To make a python zipfile browser.
-Dependencies:
-    zipfile
-    os
-    time
-    (all are standard)
-History:
-    0.0 added commenting
-"""
 import zipfile
 import os
 import time
 try:
     import remove_comments
-except ImportError:
+except:
     print("You don't have the remove_comments program")
-    print("To get that, go to:")
-    print("https://github.com/thecodingchicken/fbrowser")
-    print("\nLook for the remove_comments.py program")
 else:
     remove_comments.remove_cmts('zipbrowser.py')
     del remove_comments

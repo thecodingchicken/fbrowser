@@ -6,7 +6,9 @@ from get_args import get_args,get_args2
 h_dir=os.path.expanduser('~') 
 prmtusrnme=False
 import remove_comments
+remove_comments.remove_cmts('fbrowser.py')
 from other_functions import string_contains
+import zipbrowser
 import tarfile
 def run():
     print("Python Text File Browser.")
