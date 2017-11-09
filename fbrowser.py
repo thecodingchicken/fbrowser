@@ -24,6 +24,7 @@ commands to use:
     cdhmdir    v1.7.1
     run        v2.0
     cat        v2.3
+    tar        v2.6
 Versions:
     Alpha:
         0.0 created initial structure
@@ -101,7 +102,9 @@ Versions:
         2.5.1 Added dir command- it justs prints a message
         2.5.2 Added remove_comments-it will strip all single-line comments and
                          multi-line comments.  This makes the file shorter
-        2.5.3 RFC tarfiles  -- I will make this able to read tarfiles.  
+        2.5.3 RFC tarfiles  -- I will make this able to read tarfiles.
+        2.6.0 Tar-- this command will allow you to view .tar files.
+        
         
 """
 import os    #os module is needed for changing directory, creating files, ...
@@ -116,6 +119,10 @@ h_dir=os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 prmtusrnme=False#For PRoMpTing of the USeR NaME
 import remove_comments
+remove_comments.remove_cmts('fbrowser.py')
+from other_functions import string_contains
+import zipbrowser#
+import tarfile#tarfile is used for the tarbrowser sub-shell
 ##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
 def run():
     """
@@ -242,6 +249,61 @@ run()
             except Exception as error:
                 print("Error: could not create directory")##It couldn't be 
                 print(error)##created, so let's tell them again.
+        elif command[0:4]=='tar ':
+            if os.path.exists(command[4:].strip()):
+                print("Tar file exists.  \nDepending on the size of the file,",
+                      end='')
+                print(" it may take a long time")
+                file_n=command[4:].strip()
+                print("Loaded tar file.  Starting tarbrowser.\n")
+                text=''
+                while True:
+                    try:
+                        text=input('%s >'%os.path.basename(file_n))
+                    except:
+                        print("To quit, type 'exit'")
+                        continue
+                    if text=='exit':
+                        print("Exiting") 
+                        break
+                    elif text[:4]=='add ':
+                        if os.path.exists(text[4:].strip()):
+                            file=tarfile.TarFile(file_n,'a')
+                            print("Opened tar archive.")
+                            if os.path.isfile(text[4:].strip()):
+                                print("Adding file to archive")
+##                                shutil.copy(text[4:].strip,'.')
+                                file.add(os.path.basename(text[4:].strip()))
+                                os.unlink(os.path.basename(text[4:].strip()))
+                            file.add(text[4:].strip())
+                            print("Wrote file/folder")
+                            file.close()
+                        else:
+                            print("File doesn't exist")
+                    elif text=='view':
+                        file=tarfile.TarFile(file_n)
+                        c=file.next();
+                        counter=0
+                        while c!=None:
+                            print(c)
+                            c=file.next()
+                            counter+=1;
+                            if counter==9:
+                                counter=0
+                                try:foo=input('Press enter to continue')
+                                except:
+                                    print("Exiting.")
+                                    break
+                        file.close()
+                file.close()
+                del file
+            else:
+                print("Tar file not found.")
+                print("Other tar files are:")
+                files=os.listdir('.')
+                for i in range(len(files)):
+                    if string_contains(files[i],'.tar'):
+                        print(files[i])
         elif command=='mkdir':
             print("********** mkdir **********")##  Help on mkdir
             print("\nUse mkdir to create new directories.")
