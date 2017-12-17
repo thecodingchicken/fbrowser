@@ -10,21 +10,14 @@ remove_comments.remove_cmts('fbrowser.py')
 from other_functions import string_contains
 import zipbrowser
 import tarfile
+import threes
 def run():
     print("Python Text File Browser.")
     print("\nA convient file browser made by Joshua")
-    usern=''
-    if prmtusrnme==True:
-        usern=input("Username(for history to be sent to Joshua): ")
-    if len(usern)>0 and prmtusrnme==True:
-        h_file=os.path.join(h_dir,'h_file')
-        a=open(h_file,'a')
-        a.write('%s\n'%usern)
-        a.close()
     print("Starting file browser")
     command=None
     while command!='exit':
-        command=input("%s$ "%os.getcwd())
+        command=input("%s$ "%os.getcwd().replace('\\','/'))
         if command[0:3] == 'cd ': 
             if (os.path.exists(os.path.join('.',command[3:].strip()))):
                 if os.path.isdir(os.path.join('.',command[3:].strip())):
@@ -61,6 +54,13 @@ def run():
                 file.close()
                 try:os.chdir(hmdir)
                 except:pass
+        elif command == 'bank':
+            try:
+                import bank
+            except:
+                print("Sorry, but it isn't working")
+            else:
+                pass
         elif command == 'ls' :
             for i in os.listdir(os.path.realpath('.')):
                 print("%s"%i, end='\n')
@@ -229,7 +229,20 @@ def run():
             print("Usage: 'pwd'")
         elif command.find( 'pwd')==0:
             print(  '\n\t%s\n'%os.path.realpath('.')  )
-        elif command[0:3] =='cp ':
+        elif command[0:6] == 'threes':
+            print("Starting game of threes")
+            try:
+                threes.play_game_interactive3()
+            except Exception as e:
+                print("Something went wrong. %s"%e)
+            
+        elif command=='text editor' or command=='joshpad':
+            try:
+                import text_editor
+                text_editor.start()
+            except:print("Done")
+            else:pass
+        elif command[0:3] == 'cp ':
             locs,nums=get_args2(command[3:])
             from_loc = locs[0]
             to_loc= locs[1]
@@ -303,7 +316,24 @@ def run():
             elif os.path.isdir(run):
                 print("%s is a directory.")
             else:
-                print("Sorry, but that doesn't seem to be a file")
+                print("\n\n*****Sorry, but that doesn't seem to be a file")
+                print("Would you like to execute this in the command line?")
+                print("It might leave a command prompt window behind")
+                print("while it is running. If your program is graphical, ")
+                print("you can close this.  Clearly, if it is not, then")
+                print("DON'T!")
+                try:f= input("(Y/n)")[0].lower()
+                except:
+                    print("Sorry, but you gave an invalid input, ")
+                    print("Going back")
+                    continue
+                else:
+                    if f=='y':
+                        n=os.system(run)
+                        print("Ran.  Program gave return code %s"%n)
+                    else:
+                        print("Canceled.")
+        
         elif command[0:4] == 'cat ':
             files=command[4:].strip()
             for file in files.split():
@@ -316,6 +346,22 @@ def run():
                 print('\n\n\n')
         elif command[0:3]=='dir':
             print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
+        elif command[0:5]=='clear':
+            if os.sys.platform=='win32':
+                tmp=os.system('cls')
+            elif os.sys.platform in ['linux','linux2','linux3',
+                                  'cygwin','darwin','os2','os2emx',
+                                  'freebsd7','freebsd8','freebsdN']:
+                os.system('clear')
+            else:
+                try:
+                    os.system('clear|grep thisstringwillneverbeseen')
+                except:
+                    try:
+                        os.system('cls|grep thisstringwillneverbeseen')
+                    except:
+                        print("Sorry,but no known command clears the screen")
+        elif command=='':pass
         else:
             print("Command not recognized")
     print("Logging out.")

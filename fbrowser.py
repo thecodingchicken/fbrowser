@@ -25,6 +25,10 @@ commands to use:
     run        v2.0
     cat        v2.3
     tar        v2.6
+    clear      v2.6.1
+##    bank       v2.6.2
+    text edit  v2.6.4
+    joshpad    v2.7
 Versions:
     Alpha:
         0.0 created initial structure
@@ -104,8 +108,19 @@ Versions:
                          multi-line comments.  This makes the file shorter
         2.5.3 RFC tarfiles  -- I will make this able to read tarfiles.
         2.6.0 Tar-- this command will allow you to view .tar files.
-        
-        
+        2.6.1 clear-clear the screen
+        2.6.2 Added a bank command, so you can do checking from the command line
+        2.6.3 Bank command is not working, taking off for now.
+        2.7   Added a graphical text editor.
+        2.7.1 joshpad - the graphical text editor now works by importing
+                        the module and doing module_name.start()
+        2.7.2 The fix to the sub-command run is here!  We can now
+                        choose to execute things in the command shell in windows
+                        A better way to verify this would be to also check the
+                        path.  We could recursively search through each directory
+                        if the file is in it.  We would stop at the first, and tell
+                        the user which we are doing.  But, that isn't yet.  
+        v
 """
 import os    #os module is needed for changing directory, creating files, ...
 #Anything from sys can be accessed in os.sys
@@ -124,6 +139,7 @@ from other_functions import string_contains
 import zipbrowser#
 import tarfile#tarfile is used for the tarbrowser sub-shell
 ##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
+import threes
 def run():
     """
 run()
@@ -132,24 +148,12 @@ run()
     """
     print("Python Text File Browser.")#intro
     print("\nA convient file browser made by Joshua")#intro
-    usern=''
-    if prmtusrnme==True:
-        usern=input("Username(for history to be sent to Joshua): ")#get a
-    #username.  This is pointless and annoying.  It will not be active if
-    # prmtusrnme is False
-    if len(usern)>0 and prmtusrnme==True:#if the usern is not blank and
-        #you are allowed to get the username
-        h_file=os.path.join(h_dir,'h_file')#get the location of the file
-        a=open(h_file,'a')#open the file in appending mode, creating if
-        #needed
-        a.write('%s\n'%usern)#write it in a *fancy* way
-        a.close()#close the file
     print("Starting file browser")#When I first did this, it said
     #  "Starting browser".  I couldn't figure out why.  ;-)
     command=None#Set the command as None so that it doesn't
     #complain
     while command!='exit':#While loop(duh(it's in the name))
-        command=input("%s$ "%os.getcwd())#Print the current directory,
+        command=input("%s$ "%os.getcwd().replace('\\','/'))#Print the current directory,
         # and prompt for a command
         if command[0:3] == 'cd ': #command='cd', and they have somewhere for
             #us to go.
@@ -203,6 +207,13 @@ run()
                 file.close()#close the file
                 try:os.chdir(hmdir)#Try to change to the directory
                 except:pass##fail silently
+        elif command == 'bank':
+            try:
+                import bank
+            except:
+                print("Sorry, but it isn't working")
+            else:
+                pass
         elif command == 'ls' :##The user wants to list the current working
             #directory.
             for i in os.listdir(os.path.realpath('.')):#Use a for loop to 
@@ -404,7 +415,20 @@ run()
             print("Usage: 'pwd'")
         elif command.find( 'pwd')==0:#the user wants to find out the current dir
             print(  '\n\t%s\n'%os.path.realpath('.')  )
-        elif command[0:3] =='cp ':##CoPy something
+        elif command[0:6] == 'threes':
+            print("Starting game of threes")
+            try:
+                threes.play_game_interactive3()
+            except Exception as e:
+                print("Something went wrong. %s"%e)
+            
+        elif command=='text editor' or command=='joshpad':
+            try:
+                import text_editor
+                text_editor.start()
+            except:print("Done")
+            else:pass
+        elif command[0:3] == 'cp ':##CoPy something
             locs,nums=get_args2(command[3:])
             from_loc = locs[0]#get the from-location
             to_loc= locs[1]#get the to-location
@@ -497,7 +521,27 @@ run()
             elif os.path.isdir(run):#it is a directory, so complain
                 print("%s is a directory.")
             else:#it is not a file or directory
-                print("Sorry, but that doesn't seem to be a file")
+                print("\n\n*****Sorry, but that doesn't seem to be a file")
+                print("Would you like to execute this in the command line?")
+                print("It might leave a command prompt window behind")
+                print("while it is running. If your program is graphical, ")
+                print("you can close this.  Clearly, if it is not, then")
+                print("DON'T!")
+                print("\n\n")
+                print("Valid locations of your file are below.")
+                print("The top one will run first.")
+                try:f= input("(Y/n)")[0].lower()
+                except:
+                    print("Sorry, but you gave an invalid input, ")
+                    print("Going back")
+                    continue
+                else:
+                    if f=='y':
+                        n=os.system(run)
+                        print("Ran.  Program gave return code %s"%n)
+                    else:
+                        print("Canceled.")
+        
         elif command[0:4] == 'cat ':#list every file
             files=command[4:].strip()##seperate it so that you can do
             #several files
@@ -511,6 +555,22 @@ run()
                 print('\n\n\n')
         elif command[0:3]=='dir':
             print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
+        elif command[0:5]=='clear':
+            if os.sys.platform=='win32':
+                tmp=os.system('cls')
+            elif os.sys.platform in ['linux','linux2','linux3',
+                                  'cygwin','darwin','os2','os2emx',
+                                  'freebsd7','freebsd8','freebsdN']:
+                os.system('clear')
+            else:
+                try:
+                    os.system('clear|grep thisstringwillneverbeseen')
+                except:
+                    try:
+                        os.system('cls|grep thisstringwillneverbeseen')
+                    except:
+                        print("Sorry,but no known command clears the screen")
+        elif command=='':pass
         else:
             print("Command not recognized")
     print("Logging out.")

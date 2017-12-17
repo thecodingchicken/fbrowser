@@ -3,8 +3,11 @@ import os
 import time
 try:
     import remove_comments
-except:
+except ImportError:
     print("You don't have the remove_comments program")
+    print("To get that, go to:")
+    print("https://github.com/thecodingchicken/fbrowser")
+    print("\nLook for the remove_comments.py program")
 else:
     remove_comments.remove_cmts('zipbrowser.py')
     del remove_comments
