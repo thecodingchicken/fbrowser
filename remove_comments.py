@@ -11,6 +11,8 @@ def single_lines(l):
             if l[i].strip()=='':l[i]=''
     return l[:]
 def multi_lines(l):
+    depth_p=0
+    depth_b=0
     l2=[]
     in_cmt=False
     for i in range(len(l)):
@@ -21,6 +23,23 @@ def multi_lines(l):
             l2.append(l[i])
     return l2
 import os
+def multi_lines2(l):
+    depth_p=0
+    depth_b=0
+    depth_c=0
+    in_quotes=None
+    l2=[]
+    in_cmt=False
+    for line in range(len(l)):
+        for char in l[line]:
+            if char==chr(123):depth_p+=1
+            elif char==chr(91):depth_b+=1
+            elif char==chr(40):depth_c+=1
+            elif char==chr(125):depth_p-=1
+            elif char==chr(93):depth_b-=1
+            elif char==chr(41):depth_c-=1
+    print()
+            
 def remove_cmts(file):
     ##file='remove_comments.py'
     f,ext=os.path.splitext(file)
@@ -30,7 +49,7 @@ def remove_cmts(file):
         print("The source file \"%s\" doesn't exist"%file)
         os.sys.exit(1)
     print("**********DECOMMENTING PROGRAM**********")
-    print("Loading lines from file...")
+    print("Loading lines from file: %s"%file)
     print("This may take a long time.  Press ^C to exit if you don't want to.")
     try:
         lines=a.readlines()

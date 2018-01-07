@@ -28,29 +28,39 @@ if len(sys.argv)>1:
 else:file_n=""
 
 def line():
+    global root,menu,text
     lin = "_" * 60
     text.insert(INSERT,lin)
 
 def date():
+    global root,menu,text
     data = datetime.date.today()
     text.insert(INSERT,data)
 def normal():
+    global root,menu,text
     text.config(font = ("Courier New", 10))
 def bold():
+    global root,menu,text
     text.config(font = ("Courier New", 10, "bold"))
 def underline():
+    global root,menu,text
     text.config(font = ("Courier New", 10, "underline"))
 def italic():
+    global root,menu,text
     text.config(font = ("Courier New",10,"italic"))
 def font():
+    global root,menu,text
     (triple,color) = askcolor()
     if color:
        text.config(foreground=color)
 def kill():
+    global root,menu,text
     root.destroy()
 def about():
+    global root,menu,text
     pass
 def opn():
+    global root,menu,text
     text.delete(1.0 , END)
     file = open(askopenfilename() , 'r')
     if file != '':
@@ -59,25 +69,31 @@ def opn():
     else:
         pass
 def save():
+    global root,menu,text
     filename = asksaveasfilename()
     if filename:
         alltext = text.get(1.0, END)
         open(filename, 'w').write(alltext) 
 def copy():
+    global root,menu,text
     text.clipboard_clear()
     text.clipboard_append(text.selection_get()) 
 def paste():
+    global root,menu,text
     try:
         teext = text.selection_get(selection='CLIPBOARD')
         text.insert(INSERT, teext)
     except:
         tkMessageBox.showerror("Error","Cannot paste!")
 def clear():
+    global root,menu,text
     sel = text.get(SEL_FIRST, SEL_LAST)
     text.delete(SEL_FIRST, SEL_LAST)
 def clearall():
+    global root,menu,text
     text.delete(1.0 , END)
 def background():
+    global root,menu,text
     (triple,color) = askcolor()
     if color:
        text.config(background=color)
@@ -85,7 +101,7 @@ def background():
        
 
 def about():
-
+    global root,menu,text
     ab = Toplevel(root)
 
     txt = "Joshpad\nWebsite: https://github.com/thecodingchicken\nLicense: GPL v3"
@@ -97,9 +113,11 @@ def about():
     
 
 def web():
+    global root,menu,text
     webbrowser.open('https://github.com/thecodingchicken')
 
 def start():
+    global root,menu,text
     root = Tk()
     root.title("Joshpad")
     menu = Menu(root)

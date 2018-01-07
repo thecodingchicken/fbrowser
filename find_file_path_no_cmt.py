@@ -1,12 +1,6 @@
 import os,time,remove_comments
 remove_comments.remove_cmts('find_file_path.py')
 def find_file(to_find,debug=False):
-    """find_file(to_find, debug = False
-to_find is a file that you want to search for.
-It will search through your path to find a file.  If it can't find it, then
-it will return nothing.  debug is to list more info.
-If you have a directory that is listed in the path that is invalid,
-it will list it.  """
     valid=[]
     path=os.get_exec_path()
     for DIR_ in path:
