@@ -6,3 +6,5 @@ fbrowser_no_cmt_old.py
 remove_comments_no_cmt.py
 *.tar
 *.zip
+build\\lib
+build/lib
