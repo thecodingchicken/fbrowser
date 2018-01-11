@@ -126,16 +126,10 @@ Versions:
 """
 import os    #os module is needed for changing directory, creating files, ...
 #Anything from sys can be accessed in os.sys
-import shutil  #shutil module is used in copying, moving, and deleting
-               #directory trees
-import time    #time is used for the printing of dates in any other format
-#than in seconds
-import ctypes#This module is used in hiding files on windows.
-from get_args import get_args2
 ##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
-import find_file_path
 import remove_comments
 import tarb
+import other_functions as other_f
 H_DIR = os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 HMDIR = os.path.expanduser(os.path.join('~', '.hmdir'))
@@ -152,414 +146,70 @@ def run():
     info
     file
     """
-    print("Python Text File Browser.")#intro
-    print("\nA convient file browser made by Joshua")#intro
-    print("Starting file browser")#When I first did this, it said
-    #  "Starting browser".  I couldn't figure out why.  ;-)
-    command = None#Set the command as None so that it doesn't
+    other_f.print_start_info()
+    command = None
+    #Set the command as None so that it doesn't
     #complain
     while command != 'exit':#While loop(duh(it's in the name))
 ##        p=find_file_path.linux_path(os.getcwd())
-        command = input("%s$ "%os.getcwd().replace('\\', '/'))
+        command = other_f.get_input()
         #Print the current directory, and prompt for a command
         if command[0:3] == 'cd ': #command='cd', and they have somewhere for
-            #us to go.
-            if os.path.exists(os.path.join('.', command[3:].strip())):
-                #verify that the path exists.
-                if os.path.isdir(os.path.join('.', command[3:].strip())):
-                    #verify that it is a directory.
-                    try:#put this in a try statement b/c file operations are
-                        #always weird.
-                        os.chdir(command[3:].strip())##cd to that dir,
-                        #stripping away all white space ex 'cd    hello' to
-                        #'hello'
-                    except PermissionError:
-                        print("Could not change directory to %s"%command[3:])
-                        print("You don't have the required permissions.")
-                    except FileNotFoundError:##oops..
-                        print("Could not change directory to %s"%command[3:])
-                        print("The directory doesn't exist.  ")
-                    except OSError:
-                        print("Could not change directory to %s"%command[3:])
-                else:#Hey! It exists, but you didn't give me a directory
-                    print("Path exists, but is not a directory.")
-            else:#What??? It doesn't exist.
-                print("Path does not exist.")
+            other_f.command_cd(command)
         elif command == 'cd':##The user wants to change to the home directory
-            #path is to a file that contains the homedir.  The homedir does
-            #not have to match real life, but it is better to have it that
-            #way.
-            try:
-                os.chdir(open(HMDIR, 'r').read())
-            except (FileNotFoundError, PermissionError,
-                    OSError, IOError):#No homedir :-(
-                print("No homedir given.")
-                print("Please give a homir.")
-                conf = 'n'
-                hmdir = ''
-                while conf.lower() != 'y' or not hmdir.strip():
-                    #While you haven't said yes to conf or
-                    #the hmdir input is nothing, TRY AGAIN.
-                    hmdir = input("Homedir: ")
-                    print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
-                          end='  ')
-                    conf = input("(Y/n)")[0]
-                random_name = open(HMDIR, 'w')#Open the file, write only.
-                ctypes.windll.kernel32.SetFileAttributesW(HMDIR, 2)
-                ##the line above uses ctypes to make the file hidden
-                random_name.write(hmdir)#write the homedir
-                random_name.close()#close the file
-                try:
-                    os.chdir(hmdir)#Try to change to the directory
-                except (FileNotFoundError,
-                        OSError, PermissionError) as random_name:
-                    print("Error:  Couldn't change directory to ")
-                    print("%s because of %s"%(hmdir, random_name))
+            other_f.command_cd_home(HMDIR)
         elif command == 'bank':
-            print("Sorry, but it isn't working")
-            # try:
-            #     import bank
-            # except:
-            #     print("Sorry, but it isn't working")
-            # else:
-            #     pass
-        elif command == 'ls':# The user wants to list the current working
-            #directory.
-            for i in os.listdir(os.path.realpath('.')):#Use a for loop to
-                print("%s"%i, end='\n')#list each object in the directory
-            print()#Print a newline so that there is a seperation
-        elif command == 'ls -h' or command == 'ls --help':#print help on
-            print('*'*10, ' ls ', '*'*10)#ls
-            print("\nUse ls to LiSt thhe contents of a directory.")
-            print()
-        elif command[0:3] == 'ls ':#we want to list something else.
-            # args,string=get_args(command[3:])#this is for the future
-            if command[3:] == '':##I have no idea why I put this here, but
-                for i in os.listdir(os.path.realpath('.')):#if somehow you
-                    print("%s"%i, end='\n')#have text like 'ls ', which is
-                    #impossible because input strips away any whitespace
-            elif os.path.exists(command[3:].strip()):#If it exists
-                try:
-                    for i in os.listdir(command[3:].strip()):
-                        print("%s"%i, end='\n')##list the directory wanted
-                    print()
-                except (PermissionError, OSError, IOError):
-                    pass
-            else:
-                print("Path \"%s\" not found.  "%command[3:])#PATH NOT FOUND
-        ##ls2--this command will someday be able to replace ls.
-        ##it currently doesn't work.
-##        elif command[0:4] == 'ls2 ':
-##            args,string = get_args(command[3:])
-##            if os.path.exists(string):
-##                dir_listings = os.listdir(string)
-##                for i in range(len(dir_listing)):
-##                    to_print = '%s\t'%dir_listing[i]
-##                    if 'l' in args:
-##                        to_print = "%s\t"
+            other_f.command_bank()
+        elif command.startswith('ls'):
+            #We give the parsing over to the function.
+            other_f.command_ls(command)
         elif command[0:6] == 'mkdir ':
-            try:
-                os.mkdir(command[6:].strip())##Try to create a directory
-                print("Created dir: \"%s\""%command[6:].strip())##Tell the
-                #user that it was created
-            except (PermissionError, FileExistsError,
-                    OSError, IOError) as error:
-                print("Error: could not create directory")##It couldn't be
-                print(error)##created, so let's tell them again.
+            other_f.command_mkdir(command)
         elif command[0:4] == 'tar ':
             tarb.tarb(command[4:])
         elif command == 'mkdir':
-            print("********** mkdir **********")##  Help on mkdir
-            print("\nUse mkdir to create new directories.")
-            print("Example: 'mkdir test'")
-        elif command == 'info':
-            print("********** info **********")##help on info
-            print("\nUse info to view statistics on files")
-        elif command[0:5] == 'info ':##view the info on a filesys object
-            if os.path.exists(command[5:].strip()):#verify that it exists
-                random_name = os.lstat(command[5:].strip())##use os.lstat to get the
-                #information about the file, practically everything
-                #that you would ever need but the contents of the file.
-##                command=[command[:5]+command[5:].strip()
-                print("Name:            %s"%command[5:].strip())##print name
-                if os.path.isfile(command[5:].strip()):
-                    print("Type:            file")##print that it is a file
-                elif os.path.isdir(command[5:].strip()):
-                    print("Type:            dir")##print that it is a dir
-                elif os.path.islink(command[5:].strip()):
-                    print("Type:            link")##print that it is a link
-                elif os.path.ismount(command[5:].strip()):
-                    print("Type:            Mounted drive")#print that it is
-                    #a disk drive
-                print("st_mode:         %d"%random_name[0])
-                print("Inode number:    %d"%random_name[1])
-                #print inode number
-                print("st_dev:          %d"%random_name[2])
-                print("Size:            %d bytes"%random_name[6])
-                #print the size in bytes
-                print("st_atime:        %s"%time.ctime(random_name[7]))
-                #print the last access time
-                print("Last modified:   %s"%time.ctime(random_name[8]))
-                #print the past modification time
-                print("Creation:        %s"%time.ctime(random_name[9]))
-                #print the creation time
-            else:#the path is not found
-                print("Path not found.")
-        elif command[0:6] == 'rmdir ':##delete an empty directory
-            random_name = command[6:].strip()
-            # find the name of just the directory
-            try:
-                if os.path.exists(random_name):#it exists, so let's do some tests
-                    random_name = os.path.realpath(random_name)
-                    #um, let's do this so that
-                    #if the user does 'rmdir .' and it is blank, it will
-                    #cd .. and try to do that on the current directory,
-                    #which isn't empty
-                    os.chdir(random_name)#cd to the dir
-                    info = os.listdir('.')#save the contents into a list
-                    if not info:#if it is empty, delete it
-                        os.chdir('..')
-                        os.rmdir(random_name)##os.rmdir only works on empty dirs
-                        print("Deleted dir: %s"%random_name)#print that it is deleted.
-                    else:#Sorry, but it contains stuff
-                        print("Directory is not empty.")
-                        os.chdir('..')
-            except (PermissionError, FileNotFoundError,
-                    OSError, IOError) as random_name:##We had an error somewhere in there,
-                print("Error: %s"%random_name)#so let's tell the user
-        elif command.find('exit') != -1:#if the command is 'exit',
+            other_f.command_mkdir_help()
+        elif command.startswith('info'):
+            other_f.command_info(command)
+        elif command.startswith('exit'):#if the command is 'exit',
             #let's go evaluate the while statement again.  If we don't
             #pass on, it will say that the command is not found.
             #Since it is clearly a command, we have to have it in the
             #greatest if...elif...else statment in the program.
             pass
-        elif command[0:3] == 'rm ':##The user wants to delete a file
-            if os.path.exists(command[3:].strip()):#
-                try:
-                    if os.path.isfile(command[3:].strip()):##A final check
-                        #to see if it is a file
-                        os.unlink(command[3:].strip())##use os.unlink to delete
-                        #the file(same as os.remove
-                except PermissionError:#you tried to delete something that you
-                    print("Error: you cannot delete the file")#don't own...
-                    print("Not enough permissions")
-            else:
-                print("File not found.")
-        elif command == 'rm':##help on rm
-            print("command:\trm\nUsage:\t\trm filename")
-        elif command == 'rmtree':#help on rmtree
-            print("Command:\trmtree\nUsage:\trmtree dir_to_rm")
-            print("rmtree deletes each file in a directory, ending with the")
-            print("directory.")
-        elif command[0:7] == 'rmtree ':##the rmtree command.
-            random_name = command[7:].strip()##get the directory.
-            if os.path.exists(random_name):#check if it exists.
-                conf = input("Are you sure(Y/n)").lower()#confirm... always a good
-                if conf == 'y':#thing to do
-                    try:
-                        shutil.rmtree(random_name)#try to delete it with shutil.rmtree
-                    except PermissionError as random_name:
-                        ##we had an error, so tell the
-                        print("Could not delete file %s"%random_name)
-                        #user what it is
-                    else:#this worked.  The else statement executes this command
-                        #if there was no problem.
-                        print("Deleted directory.")
-                else:##haha, they didn't want to do it.
-                    print("Did not delete directory.")
-            else: print("Directory does not exist.")#self-explaining
-        elif command == 'pwd -h' or command == 'pwd --help':#help on pwd
-            print('*'*10, ' pwd ', '*'*10)
-            print("use pwd to Print the current Working Directory.")
-            print("Usage: 'pwd'")
-        elif command.find('pwd') == 0:#the user wants to find out the current dir
-            print('\n\t%s\n'%os.path.realpath('.'))
+        elif command.startswith('rm'):
+            if not other_f.command_rm_all(command):
+                print("Command not recognized")
+        elif command.startswith('pwd'):
+            other_f.command_pwd(command)
         elif command == 'help':
-            print("Printing help on doc")
-            info = __doc__.split('\n')
-            random_name = {'cnt':0, 'max_cnt':10,
-                           'line':'', 'lines':[]}
-            while info:
-                random_name['line'] = info.pop(0)
-                random_name['cnt'] += 1
-                random_name['lines'].append('%s'%random_name['line'])
-                if random_name['cnt'] == random_name['max_cnt']:
-                    print('\n'.join(random_name['lines']), end='')###List all in lines
-                    random_name['lines'] = []##Reset lines
-                    random_name['cnt'] = 0#reset count
-                    input("\n[ENTER]")
-            del random_name
+            other_f.command_help(__doc__)
         elif command == 'help()':
             help()
         elif command[0:7] == 'help() ' and len(command) > 7:
 ##            help(exec(command[7:]))
             print("This doesn't work currently.")
         elif command == 'text editor' or command == 'joshpad':
-        ##Joshpad, Joshua's
-            try:#very own text editor.  THis is graphical.
-                import text_editor#Import here, and
-                text_editor.start()#start it up.
-            except ImportError:
-                print("Error: text editor file not found!")
-                # The program wasn't in sys.path or .
+            other_f.command_joshpad()
         elif command[0:3] == 'cp ':##CoPy something
-            locs = get_args2(command[3:])[0]
-            random_name = get_args2(command[3:])[0]
-            random_name = {'from_loc':random_name[0],
-                           'to_loc':random_name[1]}
-            if (os.path.exists(random_name['from_loc']) and
-                    (not os.path.exists(random_name['to_loc']))):
-                #the source has to exist and the destination can't exist.
-                print("Starting to copy files.")# the shutil copy* stuff
-                # gives no feedback.  I, someday, might try to do that.
-                if os.path.isdir(random_name['from_loc']):##If it is a dir,
-                    shutil.copytree(random_name['from_loc'],
-                                    random_name['to_loc'],
-                                    list_f=True)
-                    # use copytree
-                elif os.path.isfile(random_name['from_loc']):
-                # if it is a file
-                    shutil.copy(random_name['from_loc'],
-                                random_name['to_loc'],
-                                list_f=True)
-                    # use just plain old copy
-                print("Done copying files.")
-            else:
-                print("Source doesn't exist or the destination exists.")
+            other_f.command_cp(command)
         elif command[0:3] == 'mv ':#move files over
-            locs = get_args2(command[3:])[0]
-            from_loc = locs[0]
-            to_loc = locs[1]
-            if os.path.exists(from_loc) and (not os.path.exists(to_loc)):
-                print("Starting to move over files")
-                shutil.move(from_loc, to_loc)#move works on both dirs and
-                #files
-                print("Done moving files.")
-            else:
-                print("Source doesn't exist or the destination exists.")
+            other_f.command_mv(command)
         elif command[0:6] == 'touch ':#create a blank file or update the
-            #timestamp
-            if os.path.exists(command[6:].strip()):#if it exists,
-                os.utime(command[6:].strip(), None)#update the timestamp
-            else:
-                random_name = open(command[6:].strip(), 'w')#create the file
-                random_name.close()#close the file
+            other_f.command_touch(command[6:])
         elif command == 'cdhmdir':##change your homedir
-            print('*'*10, "Change homedir", '*'*10)
-            try:#put this in a try statement
-##                print(H_DIR)
-                random_name = open(os.path.join(H_DIR, '.hmdir'))
-                #this is to check that
-                hmdir = random_name.read()#you already have a homedir
-                random_name.close()#always close a file
-            except (FileNotFoundError, PermissionError,
-                    OSError, PermissionError):
-                print("Homedir does not exist\nRun 'cd' to get one.")#if this is
-                continue#your first time, you have to do 'cd' to get one
-                # I have no idea why I did this that way.
-            print("Current homedir is \"%s\""%hmdir)#You have a homedir, so
-            random_name = {'conf':'n', 'hmdir':''}
-            while random_name['conf'].lower() != 'y' or not hmdir.strip():
-                random_name['hmdir'] = input("Homedir: ")
-                print("\n\nHomedir is \"%s\"\nIs that correct?"%random_name['hmdir'],
-                      end='  ')
-                random_name['conf'] = input("(Y/n)")
-            p_spam = os.path.join(H_DIR, '.hmdir')#get the path
-            file = open(p_spam, 'w')#open it, write only, recreating it
-            file.write(random_name['hmdir'])#write the hmdir string
-            file.close()#close the file
-            ctypes.windll.kernel32.SetFileAttributesW(p_spam, 2)#set it invisible
-            try:
-                os.chdir(random_name['hmdir'])#try to cd to that directory
-            except (FileNotFoundError, PermissionError,
-                    OSError, PermissionError):
-                print("Error, couldn't change dir")
+            other_f.command_cdhmdir(H_DIR)
         elif command[0:4] == 'run ':#the user wants to run a file
-            #the file has to be a whole path, such as fbrowser3.5-install.exe
-            #commands can not be used unless they are in the current directory
-            #that will hopefully work someday.  But not with windows.  I will
-            #have to find out a way to pipe the commands to the terminal before
-            #that can work.
-            random_name = command[4:].strip()#get the file
-            print("Running command: %s"%random_name)
-            if os.path.isfile(random_name):#if it is a file, run it
-                print("Running file.")
-                if os.sys.platform == 'linux':#if you use linux
-                    #you don't have os.startfile.  os.system works just as well
-                    os.system(random_name)
-                elif os.sys.platform in ['win32', 'win64']:#I don't think win64
-                    #is a platform.  I am on a 64-bit windows machine, and
-                    #python says that it is 'win32'.  I think that that is how
-                    #windows and python work.
-                    try:#try to use os.startfile.  If you use os.system,
-                        #and you are not in a command line, which this is
-                        #meant for(I only test it out in a command line), it
-                        #starts up a subshell and stays there.
-                        #os.startfile is a double-click
-                        os.startfile(random_name)
-                    except FileNotFoundError as error:
-                        print("Could not run file: file not found"%error)
-                else:
-                    print("Do not know filesystem type.")#Unknown file type.
-                    print("ANYONE WHO HAS THIS, PLEASE REPORT YOUR FILESYSTEM")
-                    print("TYPE TO JOSHUA BOWE ON GITHUB.  ")
-                    print("Report the words in double-quotes")
-                    print("\n\t\"%s\"\t\n"%os.sys.platform)
-            elif os.path.isdir(random_name):# it is a directory, so complain
-                print("%s is a directory.")
-            else: # it is not a file or directory
-                print("\n\n*****Sorry, but that doesn't seem to be a file")
-                print("Would you like to execute this in the command line?")
-                print("It might leave a command prompt window behind")
-                print("while it is running. If your program is graphical, ")
-                print("you can close this.  Clearly, if it is not, then")
-                print("DON'T!")
-                print("\n\n")
-                print("Valid locations of your file are below.")
-                print("The top one will run first.")
-                valid = find_file_path.find_file(random_name)
-                if not valid:
-                    print("No file found")
-                else:
-                    for valid_i in enumerate(valid):
-                        print("%-3d) %s"%(valid_i[0]+1, valid_i[1]))
-                try:
-                    conf = input("(Y/n)")[0].lower()
-                except:
-                    print("Sorry, but you gave an invalid input, ")
-                    print("Going back")
-                    continue
-                else:
-                    if conf == 'y':
-                        random_name = os.system(random_name)
-                        print("Ran.  Program gave return code %s"%(
-                            random_name))
-                    else:
-                        print("Canceled.")
-                del conf
+            other_f.command_run(command)
         elif command[0:4] == 'cat ':#list every file
-            random_name = command[4:].strip()##seperate it so that you can do
-            #several files
-            for file in random_name.split():
-                if os.path.exists(file):#if it exists
-                    print("\n")#print a newline
-                    print(''.join(open('alu_74181_defs.py').readlines()))
-                    print("\n")#have another newline
-                print('\n\n\n')
+            ##seperate it so that you can do several files
+            other_f.command_cat(command[4:].strip())
         elif command[0:3] == 'dir':
             print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
         elif command[0:5] == 'clear':
-            if os.sys.platform == 'win32':
-                os.system('cls')
-            elif os.sys.platform in ['linux', 'linux2', 'linux3',
-                                     'cygwin', 'darwin', 'os2', 'os2emx',
-                                     'freebsd7', 'freebsd8', 'freebsdN']:
-                os.system('clear')
-            else:
-                os.system('clear|grep thisstringwillneverbeseen')
-                os.system('cls|grep thisstringwillneverbeseen')
+            other_f.command_clear()
         elif command == '':
-            pass
+            pass# Blank lines don't matter
         else:
             print("Command not recognized")
     print("Logging out.")
