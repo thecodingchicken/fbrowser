@@ -1,0 +1,33 @@
+Commands working: 
+	cd
+		'cd'
+		'cd fullpath'
+		'cd ..'
+		'cd abspath'
+	cdhmdir
+		'cdhmdir'
+	bank
+		'bank'
+		'bank anytext'
+	ls
+		'ls'
+		'ls -h'
+		'ls --help'
+		'ls dirpath'
+		'ls non-existing path'
+	mkdir
+		'mkdir'
+		'mkdir non-existing-path'
+		'mkdir existing-path'
+	tar
+		'tar '
+		'tar valid_name.tar'
+		'tar invalid_name.inv'
+	info
+		'info'
+		'info valid_name'
+		'info invalid_name'
+	exit
+		'exit'
+		('exit anytext' doesn't work)
+	

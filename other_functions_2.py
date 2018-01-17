@@ -352,15 +352,11 @@ def command_cdhmdir(h_dir):
     conf = 'n'
     hmdir = ''
     while conf.lower() != 'y' or not hmdir.strip():
-        try:
-            hmdir = input("Homedir: ")
-        except (KeyError, EOFError):
-            return
+        hmdir = input("Homedir: ")
         print("\n\nHomedir is \"%s\"\nIs that correct?"%hmdir,
               end='  ')
         conf = input("(Y/n)")
     p_spam = os.path.join(h_dir, '.hmdir')#get the path
-    os.unlink(p_spam)
     file = open(p_spam, 'w')#open it, write only, recreating it
     file.write(hmdir)#write the hmdir string
     file.close()#close the file
@@ -370,7 +366,6 @@ def command_cdhmdir(h_dir):
     except (FileNotFoundError, PermissionError,
             OSError, PermissionError):
         print("Error, couldn't change dir")
-    return
 
 def get_run_func():
     "return the function used per platform"
@@ -424,22 +419,22 @@ def command_run(command):
         print("DON'T!")
         print("\n\n")
         print("Valid locations of your file are below.")
-        print("Enter a valid number to run it, otherwise the first will")
-        print("be done.")
+        print("The top one will run first.")
         valid = find_file_path.find_file(random_name)
-        print_valid_files(valid)
+        if not valid:
+            print("No file found")
+        else:
+            for valid_i in enumerate(valid):
+                print("%-3d) %s"%(valid_i[0]+1, valid_i[1]))
         try:
-            conf = input(" Do it?(Y/n) ")[0].lower()
+            conf = input("(Y/n)")[0].lower()
         except (EOFError, KeyError):
             print("Sorry, but you gave an invalid input, ")
-            print("Going back...")
+            print("Going back")
             return
         else:
             if conf == 'y':
-                try:
-                    random_name = os.system(random_name)
-                except (KeyError, EOFError):
-                    pass
+                random_name = os.system(random_name)
                 print("Ran.  Program gave return code %s"%(
                     random_name))
             else:
@@ -488,7 +483,7 @@ def command_cd_parse(command, hmdir, h_dir):
 def command_mkdir_parse(command):
     "parse command to determine which they want"
     if command[0:6] == 'mkdir ':
-        command_mkdir(command[6:])
+        command_mkdir(command)
     elif command == 'mkdir':
         command_mkdir_help()
 
@@ -505,11 +500,3 @@ def command_tarb(path):
 def command_dir():
     "print fake stuff"
     print("What do you think that this is?\n\n\tWindows?\n\tNope.\n")
-
-def print_valid_files(valid):
-    "list everything in valid"
-    if not valid:
-        print("No file found")
-    else:
-        for valid_i in enumerate(valid):
-            print("%-3d) %s"%(valid_i[0]+1, valid_i[1]))

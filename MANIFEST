@@ -6,4 +6,5 @@ other_functions.py
 remove_comments.py
 setup.py
 tarb.py
+text_editor.py
 zipbrowser.py

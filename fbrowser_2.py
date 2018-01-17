@@ -122,15 +122,13 @@ Versions:
                       the dir
         2.7.5 Removed threes command
         2.7.6 made code pep8 compliant(mostly) code is at 9.84/10
-        2.7.7 Fixed mkdir code.
         v
 """
 import os    #os module is needed for changing directory, creating files, ...
 #Anything from sys can be accessed in os.sys
 ##b=shutil.tarfile.TarFile(os.path.realpath("..\..\..\Desktop\\compressed files\\Gutenberg.tar"))
 import remove_comments
-import tarb
-import other_functions as other_f
+import other_functions_2 as other_f
 H_DIR = os.path.expanduser('~') #h_dir is your homedir, where all global files
 #are stored
 HMDIR = os.path.expanduser(os.path.join('~', '.hmdir'))
@@ -150,46 +148,16 @@ def run():
     while command != 'exit':#While loop(duh(it's in the name))
         command = other_f.get_input()
         #Print the current directory, and prompt for a command
-        if command.startswith('cd'):
-            other_f.command_cd_parse(command, HMDIR, H_DIR)
-        elif command.startswith('bank'):
-            other_f.command_bank()
-        elif command.startswith('ls'):
-            #We give the parsing over to the function.
-            other_f.command_ls(command)
-        elif command.startswith('mkdir'):
-            other_f.command_mkdir_parse(command)
-        elif command[0:4] == 'tar ':
-            tarb.tarb(command[4:])
-        elif command.startswith('info'):
-            other_f.command_info(command)
-        elif command.startswith('exit'):#if the command is 'exit',
-            #let's go evaluate the while statement again.  If we don't
-            #pass on, it will say that the command is not found.
-            #Since it is clearly a command, we have to have it in the
-            #greatest if...elif...else statment in the program.
+        for option in ['tar', 'cp', 'touch', 'run',
+                       'cat']:#These require one arg
+            print(option, "uses one arg")
+        for option in ['cd', 'ls', 'mkdir', 'info', 'rm',
+                       'pwd', 'help']:#these require several args
+            print(option, "uses more than one arg")
+        for option in ['clear', 'joshpad', 'bank', 'dir']:
+            print(option, "uses no args")
+        if command == 'exit':
             pass
-        elif command.startswith('rm'):
-            other_f.command_rm_all(command, CMD_NOT_FOUND)
-        elif command.startswith('pwd'):
-            other_f.command_pwd(command)
-        elif command.startswith('help'):
-            other_f.command_help_parse(command, __doc__)
-        elif command == 'text editor' or command == 'joshpad':
-            other_f.command_joshpad()
-        elif command[0:3] == 'cp ':##CoPy something
-            other_f.command_cp(command)
-        elif command[0:3] == 'mv ':#move files over
-            other_f.command_mv(command)
-        elif command[0:6] == 'touch ':#create a blank file or update the
-            other_f.command_touch(command[6:])
-        elif command[0:4] == 'run ':#the user wants to run a file
-            other_f.command_run(command)
-        elif command[0:4] == 'cat ':#list every file
-            ##seperate it so that you can do several files
-            other_f.command_cat(command[4:].strip())
-        elif command[0:3] == 'dir':
-            other_f.command_dir()
         elif command[0:5] == 'clear':
             other_f.command_clear()
         elif command == '':
@@ -199,9 +167,7 @@ def run():
     print("Logging out.")
 if __name__ == '__main__':
     try:
-        ##print(os.sys.argv)##Testing
         run()##Run the program
     except Exception as error:
         print("Exited by %s"%error)
         raise
-##        print(sys.argv)
