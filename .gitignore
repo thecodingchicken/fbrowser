@@ -8,3 +8,4 @@ remove_comments_no_cmt.py
 *.zip
 build\\lib
 build/lib
+test/
