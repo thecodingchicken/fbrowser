@@ -9,3 +9,4 @@ remove_comments_no_cmt.py
 build\\lib
 build/lib
 test/
+test
