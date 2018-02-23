@@ -81,7 +81,11 @@ def command_cd_home(hm_dir):
                   end='  ')
             conf = input("(Y/n)")[0]
         hmdir_file = open(hm_dir, 'w')#Open the file, write only.
-        ctypes.windll.kernel32.SetFileAttributesW(hm_dir, 2)
+        if os.sys.platform == 'win32':
+            try:
+                ctypes.windll.kernel32.SetFileAttributesW(hm_dir, 2)
+            except (AttributeError, FileNotFoundError,, PermissionError):
+                print("Couldn't hide file.")
         ##the line above uses ctypes to make the file hidden
         hmdir_file.write(hmdir)#write the homedir
         hmdir_file.close()#close the file
