@@ -9,6 +9,7 @@ CMD_NOT_FOUND = "Command not recognized."
 def run():
     other_f.print_start_info()
     command = None
+    issound = False
     while command != 'exit':
         command = other_f.get_input()
         if command.startswith('cd'):
