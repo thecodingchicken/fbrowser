@@ -81,7 +81,11 @@ def command_cd_home(hm_dir):
                   end='  ')
             conf = input("(Y/n)")[0]
         hmdir_file = open(hm_dir, 'w')#Open the file, write only.
-        ctypes.windll.kernel32.SetFileAttributesW(hm_dir, 2)
+        if os.sys.platform == 'win32':
+            try:
+                ctypes.windll.kernel32.SetFileAttributesW(hm_dir, 2)
+            except (AttributeError, FileNotFoundError,, PermissionError):
+                print("Couldn't hide file.")
         ##the line above uses ctypes to make the file hidden
         hmdir_file.write(hmdir)#write the homedir
         hmdir_file.close()#close the file
@@ -513,3 +517,38 @@ def print_valid_files(valid):
     else:
         for valid_i in enumerate(valid):
             print("%-3d) %s"%(valid_i[0]+1, valid_i[1]))
+
+# class SoundWriter():
+#     """a wrapper for the win32com.client.Dispatch("SAPI.SpVoice")
+#     object.  It only has a write method
+#     """
+#     def __init__(self, client, print_s=True):
+#         "init this with the win32com.client library and a bool"
+#         self.print_s = print_s
+#         self.speaker = client.Dispatch("SAPI.SpVoice")
+#     def write(self, string, backup_sys=bk):
+#         "write stuff out"
+#         if self.print_s:
+#             print(string, file=backup_sys)
+#         self.speaker.Speak(str(string))
+#     # def read(self, size=-1):
+#     #     "a dummy function to satisty pylint"
+#     #     print("READING %d fake bytes"%size)
+#     def set_print(self, new_p):
+#         "set print_s for self"
+#         self.print_s = new_p
+# def command_toggle_sound(is_sound):
+#     """toggle sound for the computer
+#     this currently worksk only for Windows.  """
+#     if os.sys.platform == 'win32':
+#         try:
+#             from win32com import client
+#         except ImportError:
+#             print("Sorry, but you don't have win32com")
+#         else:
+#             speaker = SoundWriter(client, True)
+#             is_sound = not is_sound
+#             return speaker, is_sound
+#     else:
+#         print("Sorry, but no known thing works on your system")
+#     return False, False

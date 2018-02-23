@@ -146,6 +146,7 @@ def run():
     """
     other_f.print_start_info()
     command = None
+    issound = False
     #Set the command as None so that it doesn't complain
     while command != 'exit':#While loop(duh(it's in the name))
         command = other_f.get_input()
@@ -159,6 +160,8 @@ def run():
             other_f.command_ls(command)
         elif command.startswith('mkdir'):
             other_f.command_mkdir_parse(command)
+        # elif command.startswith('togglesound'):
+        #     other_f.command_toggle_sound()
         elif command[0:4] == 'tar ':
             tarb.tarb(command[4:])
         elif command.startswith('info'):
@@ -167,7 +170,7 @@ def run():
             #let's go evaluate the while statement again.  If we don't
             #pass on, it will say that the command is not found.
             #Since it is clearly a command, we have to have it in the
-            #greatest if...elif...else statment in the program.
+            #greatest if...elif...else statment in the program (world? ).
             pass
         elif command.startswith('rm'):
             other_f.command_rm_all(command, CMD_NOT_FOUND)

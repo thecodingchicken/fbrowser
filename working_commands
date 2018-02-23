@@ -30,4 +30,5 @@ Commands working:
 	exit
 		'exit'
 		('exit anytext' doesn't work)
-	
+	rm
+		''
