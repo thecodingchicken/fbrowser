@@ -123,6 +123,9 @@ Versions:
         2.7.5 Removed threes command
         2.7.6 made code pep8 compliant(mostly) code is at 9.84/10
         2.7.7 Fixed mkdir code.
+        2.8.0 Added text-to-speach
+        2.8.1 Text-to-speach not working, so it is paused.
+        2.8.2 Fixed ctypes.windll error in other_functions with cd_home
         v
 """
 import os    #os module is needed for changing directory, creating files, ...
@@ -192,6 +195,8 @@ def run():
             other_f.command_dir()
         elif command[0:5] == 'clear':
             other_f.command_clear()
+        elif command[0:8] == 'execute ':
+            other_f.command_execute(command[8:])
         elif command == '':
             pass# Blank lines don't matter
         else:

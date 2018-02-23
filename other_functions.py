@@ -275,7 +275,11 @@ def command_help(doc_):
             print('\n'.join(random_name['lines']), end='')###List all in lines
             random_name['lines'] = []##Reset lines
             random_name['cnt'] = 0#reset count
-            input("\n[ENTER]")
+            try:
+                input("\n[ENTER]")
+            except (EOFError, KeyError):
+                print("Exiting")
+                break
     del random_name, info
     return
 
@@ -368,7 +372,7 @@ def command_cdhmdir(h_dir):
     try:
         os.chdir(hmdir)#try to cd to that directory
     except (FileNotFoundError, PermissionError,
-            OSError, PermissionError):
+            OSError):
         print("Error, couldn't change dir")
     return
 
@@ -513,3 +517,12 @@ def print_valid_files(valid):
     else:
         for valid_i in enumerate(valid):
             print("%-3d) %s"%(valid_i[0]+1, valid_i[1]))
+
+def command_execute(execute):
+    """Execute this, regarding all permissions.  Any errors
+    will be printed and discarded."""
+    try:
+        os.system(execute)
+    except (PermissionError, TypeError, KeyError, EOFError,
+            FileNotFoundError, OSError) as error:
+        print("Got error %s"%error)
