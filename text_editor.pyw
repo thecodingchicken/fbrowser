@@ -47,10 +47,10 @@ def underline():
     text.config(font = ("Courier New", 10, "underline"))
 def italic():
     global root,menu,text
-    text.config(font = ("Courier New",10,"italic"))
+    text.config(font = ("Courier New", 10, "italic"))
 def font():
-    global root,menu,text
-    (triple,color) = askcolor()
+    global root, menu, text
+    (triple, color) = askcolor()
     if color:
        text.config(foreground=color)
 def kill():

@@ -160,8 +160,8 @@ def run():
             other_f.command_ls(command)
         elif command.startswith('mkdir'):
             other_f.command_mkdir_parse(command)
-        elif command.startswith('toggles'):
-            other_f.command_toggle_sound()
+        # elif command.startswith('togglesound'):
+        #     other_f.command_toggle_sound()
         elif command[0:4] == 'tar ':
             tarb.tarb(command[4:])
         elif command.startswith('info'):
